@@ -26,8 +26,8 @@ for i, val in enumerate(goods):
 if goods[0] != goods[a - 1]:
     total += comb(lastcount, lastindex)
 else:
-    for i in range(a, b + 1):
-        total += comb(lastcount, i)
+    for i in range(a - 1, b):
+        if goods[a - 1] != goods[i]: break
+        total += comb(lastcount, i + 1)
 
-print(avg)
-print(total)
+print("{}\n{}".format(avg, total))
