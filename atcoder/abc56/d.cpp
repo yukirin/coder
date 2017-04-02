@@ -47,7 +47,7 @@ bool dp[5001][5000];
 bool dp2[5001][5000];
 
 int main(int argc, char *argv[]) {
-	// INFILE();
+	INFILE();
   int n, k;
   int needs = 0;
 
