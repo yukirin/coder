@@ -43,11 +43,79 @@ void sC(char *pa, int size);
 void wS(string *ps, int size);
 void lS(string *ps, int size);
 
+bool dp[5001][5000];
+bool dp2[5001][5000];
+
 int main(int argc, char *argv[]) {
-  INFILE();
-	int n, k;
-	cin >> n >> k;
-	cout << n << " " << k << "\n";
+	// INFILE();
+  int n, k;
+  int needs = 0;
+
+  cin >> n >> k;
+
+  int cards[n];
+  sI(cards, n);
+
+  for (int i = 0; i < 5001; ++i) {
+    dp[i][0] = dp2[i][0] = true;
+  }
+
+  for (int i = 1; i < n + 1; ++i) {
+    for (int j = 1; j < k; ++j) {
+      bool prev = (j - cards[i - 1] < 0) ? false : dp[i - 1][j - cards[i - 1]];
+      if (dp[i - 1][j] || prev) {
+        dp[i][j] = true;
+      }
+
+      bool prev2 =
+          (j - cards[n - i] < 0) ? false : dp2[i - 1][j - cards[n - i]];
+      if (dp2[i - 1][j] || prev2) {
+        dp2[i][j] = true;
+      }
+    }
+  }
+
+  for (int i = 0; i < n; ++i) {
+    if (cards[i] >= k) {
+      needs++;
+      continue;
+    }
+
+    bool b = false;
+
+    for (int nv = k - cards[i]; nv < k; ++nv) {
+      if (i == 0) {
+        if (dp2[n - 1][nv]) {
+          needs++;
+          b = true;
+          break;
+        }
+        continue;
+      }
+
+      if (i == n - 1) {
+        if (dp[n - 1][nv]) {
+          needs++;
+          b = true;
+          break;
+        }
+        continue;
+      }
+
+      for (int nv2 = 0; nv2 <= nv; ++nv2) {
+        if (dp[i][nv2] && dp2[n - i - 1][nv - nv2]) {
+          b = true;
+          needs++;
+          break;
+        }
+      }
+
+      if (b)
+        break;
+    }
+  }
+
+  cout << n - needs << "\n";
   return 0;
 }
 
