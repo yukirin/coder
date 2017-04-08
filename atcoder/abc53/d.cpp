@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <bitset>
+#include <boost/dynamic_bitset.hpp>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
@@ -18,7 +19,6 @@
 #include <typeindex>
 #include <typeinfo>
 #include <vector>
-#include <boost/dynamic_bitset.hpp>
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
@@ -43,10 +43,29 @@ template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
+int ar[100000];
+
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+  // INFILE();
+  int n;
+  cin >> n;
+
+  vector<int> v(n);
+  scan(v);
+
+  for (const auto &val : v) {
+    ar[val]++;
+  }
+
+  int count = 0;
+  for (const auto &val : ar) {
+    if (val == 0) {
+      continue;
+    }
+		count++;
+  }
+
+  cout << ((count % 2 == 0) ? count - 1 : count) << "\n";
   return 0;
 }
 
@@ -64,12 +83,12 @@ template <class T> static void scan(vector<T> &v) {
 }
 
 static void scan(vector<string> &v, bool isWord) {
-	if (isWord) {
-		for (auto &n : v) {
-			cin >> n;
-		}
-		return;
-	}
+  if (isWord) {
+    for (auto &n : v) {
+      cin >> n;
+    }
+    return;
+  }
 
   int i = 0, size = v.size();
   string s;
@@ -86,13 +105,14 @@ static void scan(vector<string> &v, bool isWord) {
 }
 
 static boost::dynamic_bitset<> scan(char trueValue) {
-	string s;
-	getline(cin, s);
+  string s;
+  getline(cin, s);
 
-	if (s.size() == 0) {
-		getline(cin, s);
-	}
+  if (s.size() == 0) {
+    getline(cin, s);
+  }
 
-	for_each(begin(s), end(s), [trueValue](char &c) { c = (c == trueValue) ? '1' : '0'; });
-	return boost::dynamic_bitset<>(string(rbegin(s), rend(s)));
+  for_each(begin(s), end(s),
+           [trueValue](char &c) { c = (c == trueValue) ? '1' : '0'; });
+  return boost::dynamic_bitset<>(string(rbegin(s), rend(s)));
 }
