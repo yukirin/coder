@@ -51,7 +51,7 @@ void factoring(int n, int (&f)[1001]);
 int factors[1001];
 
 int main(int argc, char *argv[]) {
-  // INFILE();
+	INFILE();
   ll n;
   cin >> n;
 
