@@ -47,9 +47,19 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+	// INFILE();
+	ll n, a, b;
+	cin >> n >> a >> b;
+	vector<ll> v(n);
+	scan(v);
+
+	ll cost = 0;
+
+	REP(i, 0, n - 1) {
+		ll length = v[i + 1] - v[i];
+		cost += min(a * length, b);
+	}
+	cout << cost << "\n";
   return 0;
 }
 
