@@ -46,10 +46,64 @@ template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
+int adjList[100][100];
+int nextP[100][100];
+int used[100][100];
+
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+  // INFILE();
+  int n, m;
+  cin >> n >> m;
+
+  fill((int *)adjList, (int *)adjList[100], 1000000000);
+  REP(i, 0, 100) adjList[i][i] = 0;
+
+  fill((int *)used, (int *)used[100], -1);
+
+  REP(i, 0, 100) REP(j, 0, 100) nextP[i][j] = j;
+
+  REP(i, 0, m) {
+    int a, b, c;
+    cin >> a >> b >> c;
+    adjList[a - 1][b - 1] = adjList[b - 1][a - 1] = c;
+    used[a - 1][b - 1] = used[b - 1][a - 1] = 1;
+  }
+
+  REP(k, 0, n) {
+    REP(i, 0, n) {
+      REP(j, 0, n) {
+        if (adjList[i][j] > adjList[i][k] + adjList[k][j]) {
+          adjList[i][j] = adjList[i][k] + adjList[k][j];
+
+          nextP[i][j] = nextP[i][k];
+        }
+      }
+    }
+  }
+
+  REP(i, 0, n) {
+    REP(j, 0, n) {
+      int cur = i, end = j;
+
+      while (cur != j) {
+        used[cur][nextP[cur][end]] = -1;
+        used[nextP[cur][end]][cur] = -1;
+
+        cur = nextP[cur][end];
+      }
+    }
+  }
+
+  int count = 0;
+  REP(i, 0, n) {
+    REP(j, 0, n) {
+      if (used[i][j] == -1)
+        continue;
+      count++;
+    }
+  }
+
+  cout << count / 2 << "\n";
   return 0;
 }
 
