@@ -37,7 +37,7 @@ using d_i = pair<double, int>;
 using ll_ll = pair<ll, ll>;
 using d_d = pair<double, double>;
 
-static constexpr ll LL_MOD = 1000000009;
+static constexpr ll LL_MOD = 1000000007;
 static constexpr int I_MOD = 1000000007;
 static constexpr double EPS = numeric_limits<double>::epsilon();
 static constexpr double PI = 3.14159265358979323846264338327950288;
@@ -47,9 +47,35 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+	// INFILE();
+  ll n;
+  cin >> n;
+
+  vector<ll> v(n);
+	scan(v);
+  vector<ll> counter(n);
+  ll pattern = 1;
+
+  for (const auto &val : v) {
+    counter[val]++;
+  }
+
+  for (int i = (n % 2 == 0) ? 1 : 2; i < n; i += 2) {
+    if (counter[i] != 2) {
+      pattern = 0;
+      break;
+    }
+  }
+  if (counter[0] != 1 && n % 2 != 0) {
+    pattern *= 0;
+  }
+
+	REP(i, 0, (n / 2)) {
+		pattern *= 2;
+		pattern %= LL_MOD;
+	}
+	
+	cout << pattern << "\n";
   return 0;
 }
 

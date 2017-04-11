@@ -19,6 +19,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include <vector>
+#include <numeric>
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
@@ -47,9 +48,26 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+	// INFILE();
+	int n, m;
+	cin >> n;
+
+	vector<int> v(n);
+	scan(v);
+
+	cin >> m;
+
+	vector<vector<int>> drinks(m);
+	for(auto &d : drinks) {
+		d.resize(2);
+		scan(d);
+	}
+
+	int total = accumulate(ALL(v), 0);
+
+	REP(i, 0, m) {
+		cout << total - v[drinks[i][0] - 1] + drinks[i][1] << "\n";
+	}
   return 0;
 }
 
