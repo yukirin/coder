@@ -10,6 +10,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <random>
 #include <set>
@@ -37,7 +38,7 @@ using d_i = pair<double, int>;
 using ll_ll = pair<ll, ll>;
 using d_d = pair<double, double>;
 
-static constexpr ll LL_MOD = 1000000007;
+static constexpr ll LL_MOD = 1000000009;
 static constexpr int I_MOD = 1000000007;
 static constexpr double EPS = numeric_limits<double>::epsilon();
 static constexpr double PI = 3.14159265358979323846264338327950288;
@@ -47,9 +48,22 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-	ll n;
-	cin >> n;
+  // INFILE();
+  char c;
+  cin >> c;
+
+  switch (c) {
+  case 'a':
+  case 'e':
+  case 'i':
+  case 'o':
+  case 'u':
+    cout << "vowel\n";
+    break;
+  default:
+    cout << "consonant\n";
+    break;
+  }
 
   return 0;
 }

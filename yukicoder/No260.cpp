@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <bitset>
-#include <boost/dynamic_bitset.hpp>
 #include <cfloat>
 #include <cmath>
 #include <ctime>
@@ -10,6 +9,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <random>
 #include <set>
@@ -22,7 +22,8 @@
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
-#define REP(i, a, b) for (int i = a; i < b; i++)
+#define REP(i, a, b) for (int i = (a); i < (b); i++)
+#define REPC(i, a) REP(i, 0, a)
 #define ALL(s) begin(s), end(s)
 #define RALL(s) rbegin(s), rend(s)
 
@@ -44,13 +45,49 @@ static constexpr double PI = 3.14159265358979323846264338327950288;
 
 template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
-static boost::dynamic_bitset<> scan(char trueValue = 'o');
+
+ll dp[10010][2][2][3][8];
+ll dp2[10010][2][2][3][8];
 
 int main(int argc, char *argv[]) {
-  INFILE();
-	ll n;
-	cin >> n;
+	INFILE();
+  string a, b;
+  cin >> a >> b;
+  int la = a.size(), lb = b.size();
 
+  dp[0][0][0][0][0] = dp2[0][0][0][0][0] = 1;
+
+  REPC(i, la) REPC(less, 2) REPC(t, 2) REPC(m3, 3) REPC(m8, 8) {
+    int lim = less ? 9 : a[i] - '0';
+    REPC(n, lim + 1) {
+      dp[i + 1][less || n < lim][t || n == 3][(m3 + n) % 3]
+        [(m8 * 10 + n) % 8] += (dp[i][less][t][m3][m8] % LL_MOD);
+    }
+  }
+
+  REPC(i, lb) REPC(less, 2) REPC(t, 2) REPC(m3, 3) REPC(m8, 8) {
+    int lim = less ? 9 : b[i] - '0';
+    REPC(n, lim + 1) {
+      dp2[i + 1][less || n < lim][t || n == 3][(m3 + n) % 3]
+         [(m8 * 10 + n) % 8] += (dp2[i][less][t][m3][m8] % LL_MOD);
+    }
+  }
+
+  ll countA = 0, countB = 0;
+
+  REPC(t, 2) REPC(m3, 3) REPC(m8, 8) {
+    if ((t || (m3 == 0)) && (m8 != 0)) {
+      (countA += dp[la][1][t][m3][m8]) %= LL_MOD;
+    }
+  }
+
+  REPC(less, 2) REPC(t, 2) REPC(m3, 3) REPC(m8, 8) {
+    if ((t || (m3 == 0)) && (m8 != 0)) {
+      (countB += dp2[lb][less][t][m3][m8]) %= LL_MOD;
+    }
+  }
+
+  cout << (countB - countA + LL_MOD) % LL_MOD << "\n";
   return 0;
 }
 
@@ -87,17 +124,4 @@ static void scan(vector<string> &v, bool isWord) {
   for (; i < size; ++i) {
     getline(cin, v[i]);
   }
-}
-
-static boost::dynamic_bitset<> scan(char trueValue) {
-  string s;
-  getline(cin, s);
-
-  if (s.size() == 0) {
-    getline(cin, s);
-  }
-
-  for_each(begin(s), end(s),
-           [trueValue](char &c) { c = (c == trueValue) ? '1' : '0'; });
-  return boost::dynamic_bitset<>(string(rbegin(s), rend(s)));
 }

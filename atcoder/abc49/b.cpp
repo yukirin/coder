@@ -19,6 +19,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include <vector>
+#include <numeric>
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
@@ -37,7 +38,7 @@ using d_i = pair<double, int>;
 using ll_ll = pair<ll, ll>;
 using d_d = pair<double, double>;
 
-static constexpr ll LL_MOD = 1000000007;
+static constexpr ll LL_MOD = 1000000009;
 static constexpr int I_MOD = 1000000007;
 static constexpr double EPS = numeric_limits<double>::epsilon();
 static constexpr double PI = 3.14159265358979323846264338327950288;
@@ -47,10 +48,16 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-	ll n;
-	cin >> n;
+  // INFILE();
+	int h, w;
+	cin >> h >> w;
 
+	vector<string> img(h);
+	scan(img);
+
+	for(const auto& row : img) {
+		cout << row << endl << row << endl;
+	}
   return 0;
 }
 
