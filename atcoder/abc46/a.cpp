@@ -51,9 +51,13 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+  // INFILE();
+	int a, b, c;
+	cin >> a >> b >> c;
+
+	vector<int> v(100);
+	v[a - 1] = v[b - 1] = v[c - 1] = 1;
+	cout << accumulate(ALL(v), 0) << endl;
   return 0;
 }
 

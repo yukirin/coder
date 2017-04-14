@@ -10,6 +10,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <random>
 #include <set>
@@ -19,7 +20,6 @@
 #include <typeindex>
 #include <typeinfo>
 #include <vector>
-#include <numeric>
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
@@ -46,6 +46,11 @@ static constexpr int I_MOD = 1000000007;
 static constexpr double EPS = numeric_limits<double>::epsilon();
 static constexpr double PI = 3.14159265358979323846264338327950288;
 
+static map<type_index, const char *const> scanType = {{typeid(int), "%d"},
+                                                      {typeid(ll), "%lld"},
+                                                      {typeid(double), "%lf"},
+                                                      {typeid(char), "%c"}};
+
 template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
@@ -58,13 +63,7 @@ int main(int argc, char *argv[]) {
 }
 
 template <class T> static void scan(vector<T> &v) {
-  map<type_index, const char *const> m = {{typeid(int), "%d"},
-                                          {typeid(ll), "%lld"},
-                                          {typeid(double), "%lf"},
-                                          {typeid(char), "%c"}};
-
-  auto tFormat = m[typeid(T)];
-
+  auto tFormat = scanType[typeid(T)];
   for (T &n : v) {
     scanf(tFormat, &n);
   }
