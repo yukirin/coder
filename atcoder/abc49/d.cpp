@@ -23,7 +23,8 @@
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
-#define REP(i, a, b) for (int i = a; i < b; i++)
+#define REP(i, a, b) for (int i = (a); i < (b); i++)
+#define REPC(i, a) REP(i, 0, a)
 #define ALL(s) begin(s), end(s)
 #define RALL(s) rbegin(s), rend(s)
 
@@ -47,22 +48,103 @@ template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
+int roadG[200000];
+int railG[200000];
+int result[200000];
+
 int main(int argc, char *argv[]) {
-  INFILE();
+	// INFILE();
 	int n, k, l;
 	cin >> n >> k >> l;
 
+	vector<vector<int>> roadList(n);
+	vector<vector<int>> railList(n);
+
 	vector<vector<int>> roads(k);
-	for(auto& r : roads) {
-		r.resize(2);
+	vector<int> r(2);
+	REPC(i, k) {
 		scan(r);
+		roadList[r[0] - 1].push_back(r[1] - 1);
+		roadList[r[1] - 1].push_back(r[0] - 1);
 	}
 
-	vector<vector<int>> railways(l);
-	for(auto& r : railways) {
-		r.resize(2);
+	REPC(i, l) {
 		scan(r);
+		railList[r[0] - 1].push_back(r[1] - 1);
+		railList[r[1] - 1].push_back(r[0] - 1);
 	}
+
+	REPC(i, n) {
+		if (roadG[i] != 0) {
+			continue;
+		}
+
+		int group = i + 1;
+		stack<int> st;
+		st.push(i);
+		roadG[i] = group;
+
+		while(!st.empty()) {
+			auto cur = st.top();
+			st.pop();
+
+			for(const auto& n : roadList[cur]) {
+				if (roadG[n] != 0) {
+					continue;
+				}
+
+				roadG[n] = group;
+				st.push(n);
+			}
+		}
+	}
+
+	REPC(i, n) {
+		if (railG[i] != 0) {
+			continue;
+		}
+
+		int group = i + 1;
+		stack<int> st;
+		st.push(i);
+		railG[i] = group;
+
+		while(!st.empty()) {
+			auto cur = st.top();
+			st.pop();
+
+			for(const auto& n : railList[cur]) {
+				if (railG[n] != 0) {
+					continue;
+				}
+
+				railG[n] = group;
+				st.push(n);
+			}
+		}
+	}
+
+	multimap<i_i, int> mp;
+	auto itr = begin(mp);
+	REPC(i, n) {
+		itr = mp.emplace_hint(itr, make_pair(roadG[i], railG[i]), i);
+	}
+
+	REPC(i, n) {
+		if (result[i] != 0) {
+			cout << result[i] << " ";
+			continue;
+		}
+
+		auto ret = mp.equal_range(make_pair(roadG[i], railG[i]));
+		int count = mp.count(make_pair(roadG[i], railG[i]));
+
+		for(auto f = ret.first; f != ret.second; f++) {
+			result[f->second] = count;
+		}
+		cout << count << " ";
+	}
+
   return 0;
 }
 
