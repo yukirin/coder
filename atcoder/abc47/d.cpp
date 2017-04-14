@@ -10,6 +10,7 @@
 #include <limits>
 #include <list>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <random>
 #include <set>
@@ -19,7 +20,6 @@
 #include <typeindex>
 #include <typeinfo>
 #include <vector>
-#include <numeric>
 
 #define DEBUG(x) cout << #x << ": " << x << endl
 #define INFILE() freopen("input.txt", "r", stdin)
@@ -51,9 +51,32 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+  // INFILE();
+  ll n, t;
+  ll lower, maxDiff = 0, count = 0;
+  cin >> n >> t;
+
+  vector<ll> v(n);
+  scan(v);
+
+  lower = v[0];
+  for (const auto &val : v) {
+    if (lower < val) {
+      if (maxDiff < val - lower) {
+        maxDiff = val - lower;
+        count = 1;
+        continue;
+      }
+      if (maxDiff == val - lower) {
+        count++;
+      }
+      continue;
+    }
+
+		lower = val;
+  }
+
+  cout << count << endl;
   return 0;
 }
 
