@@ -56,7 +56,7 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
+  // INFILE();
   ll n;
   cin >> n;
 
@@ -65,6 +65,21 @@ int main(int argc, char *argv[]) {
     val.resize(2);
     scan(val);
   }
+  ll a = v[0][0], b = v[0][1];
+
+  for (const auto &val : v) {
+    if (a <= val[0] && b <= val[1]) {
+      a = val[0];
+      b = val[1];
+      continue;
+    }
+
+    ll m = max((a + val[0] - 1) / val[0], (b + val[1] - 1) / val[1]);
+    a = val[0] * m;
+    b = val[1] * m;
+  }
+
+  cout << a + b << endl;
   return 0;
 }
 

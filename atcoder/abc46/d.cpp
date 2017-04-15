@@ -56,9 +56,17 @@ static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
 int main(int argc, char *argv[]) {
-  INFILE();
-  cout << "coder"
-       << "\n";
+  // INFILE();
+  auto b = scan('g');
+  ll gCount = b.count();
+  ll pCount = b.size() - gCount;
+
+  if (gCount == pCount) {
+    cout << "0\n";
+    return 0;
+  }
+
+  cout << (gCount - pCount) / 2 << "\n";
   return 0;
 }
 
