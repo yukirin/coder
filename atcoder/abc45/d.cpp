@@ -57,15 +57,6 @@ template <class T> static void scan(vector<T> &v);
 static void scan(vector<string> &v, bool isWord = true);
 static boost::dynamic_bitset<> scan(char trueValue = 'o');
 
-namespace std {
-template <> struct hash<ll_ll> {
-public:
-  size_t operator()(const ll_ll &x) const {
-    return hash<ll>()(x.first) ^ hash<ll>()(x.second);
-  }
-};
-}
-
 int main(int argc, char *argv[]) {
 	// INFILE();
   ll h, w, n;
