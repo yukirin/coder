@@ -1,9 +1,6 @@
-# import numpy as np
-# from scipy import linalg
-from sys import stdin
 import sys
 import os
-
+from sys import stdin
 
 stdin = open(os.path.dirname(__file__) + '/input.txt')  # local test
 input = stdin.readline
