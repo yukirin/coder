@@ -19,13 +19,11 @@ for i in range(N):
     for j in range(i_6 + 1):
         if (i + 6 ** j) > N:
             break
-        if dp[i] < dp[i + 6 ** j]:
-            dp[i + 6 ** j] = dp[i] + 1
+        dp[i + 6 ** j] = min(dp[i + 6 ** j], dp[i] + 1)
 
     for k in range(i_9 + 1):
         if (i + 9 ** k) > N:
             break
-        if dp[i] < dp[i + 9 ** k]:
-            dp[i + 9 ** k] = dp[i] + 1
+        dp[i + 9 ** k] = min(dp[i + 9 ** k], dp[i] + 1)
 
 print(dp[N])
