@@ -90,3 +90,4 @@ ENV/
 
 template/
 input.txt
+.vs/
