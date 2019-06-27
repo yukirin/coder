@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  cout << *max_element(ALL(dp[n])) << endl;
+  cout << dp[n][w] << endl;
   return 0;
 }
 
