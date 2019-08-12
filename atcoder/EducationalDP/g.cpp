@@ -9,6 +9,7 @@
 #endif
 
 #define ALL(s) begin(s), end(s)
+
 #define RALL(s) rbegin(s), rend(s)
 #define REP(i, a, b) for (int i = (a); i < (b); i++)
 #define RREP(i, a, b) for (int i = (a); i >= (b); i--)
@@ -16,6 +17,7 @@
 using namespace std;
 
 using ll = long long;
+
 using ull = unsigned long long;
 using i_i = pair<int, int>;
 using ll_ll = pair<ll, ll>;
@@ -57,7 +59,7 @@ int main(int argc, char* argv[]) {
   ll n, m;
   cin >> n >> m;
 
-  vector<vector<int>> v(n, vector<int>(0));
+  vector<vector<int>> v(n + 1, vector<int>(0));
   Fill(memo, ll(-1));
 
   REP(i, 0, m) {
