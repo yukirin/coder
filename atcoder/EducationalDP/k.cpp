@@ -38,7 +38,7 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-bool dp[100010][2];
+bool dp[100010];
 
 int main(int argc, char* argv[]) {
   INFILE;
@@ -50,22 +50,19 @@ int main(int argc, char* argv[]) {
   scan(stones);
 
   REP(i, 0, k + 1) {
-    REP(j, 0, 2) {
-      int opponent = !j;
-      bool result = false;
-      for (int stone : stones) {
-        int num = i - stone;
-        if (num < 0) continue;
-        if (!dp[num][opponent]) {
-          result = true;
-          break;
-        }
+    bool result = false;
+    for (int stone : stones) {
+      int num = i - stone;
+      if (num < 0) continue;
+      if (!dp[num]) {
+        result = true;
+        break;
       }
-      dp[i][j] = result;
     }
+    dp[i] = result;
   }
 
-  cout << (dp[k][1] ? "First" : "Second") << endl;
+  cout << (dp[k] ? "First" : "Second") << endl;
   return 0;
 }
 
