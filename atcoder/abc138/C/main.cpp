@@ -41,7 +41,7 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 ll dp[110][100010];
 
 int main(int argc, char* argv[]) {
-  INFILE;
+  // INFILE;
 
   ll n;
   cin >> n;
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     result /= 2.0;
   }
 
-  cout << fixed << setprecision(10) << result << endl;
+  cout << setprecision(12) << result << endl;
 
   return 0;
 }
