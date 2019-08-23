@@ -36,12 +36,59 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  std::string s;
-  std::cin >> s;
-  std::string t;
-  std::cin >> t;
+int indexes[100010][26];
+int f_indexes[26];
+int checked[26][26];
+vector<int> index_list[26];
 
+int main(int argc, char* argv[]) {
+  string s, t;
+  cin >> s >> t;
+
+  for (int& index : f_indexes) {
+    index = -1;
+  }
+  Fill(indexes, int(-1));
+
+  REP(i, 0, s.size()) {
+    int index = s[i] - 'a';
+    f_indexes[index] = f_indexes[index] == -1 ? i : f_indexes[index];
+
+    REP(j, 0, 26) {
+      REP(k, checked[j][index], index_list[j].size()) { indexes[index_list[j][k]][index] = i; }
+      checked[j][index] = index_list[j].size();
+    }
+    index_list[index].push_back(i);
+  }
+
+  int cur_index = f_indexes[t[0] - 'a'];
+  ll result = cur_index + 1;
+  if (cur_index == -1) {
+    cout << -1 << endl;
+    return 0;
+  }
+
+  REP(i, 1, t.size()) {
+    int index = t[i] - 'a';
+
+    if (indexes[cur_index][index] == -1) {
+      result += s.size() - cur_index - 1;
+      cur_index = f_indexes[index];
+      result += cur_index + 1;
+
+      if (cur_index == -1) {
+        cout << -1 << endl;
+        return 0;
+      }
+      continue;
+    }
+
+    int diff = indexes[cur_index][index] - cur_index;
+    result += diff;
+    cur_index = indexes[cur_index][index];
+  }
+
+  cout << result << endl;
   return 0;
 }
 
