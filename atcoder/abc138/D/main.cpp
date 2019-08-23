@@ -36,24 +36,62 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
+struct Node {
+  vector<int> children;
+  ll cost;
+  bool used;
+};
+
+Node nodes[200010];
+ll results[200010];
+
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long Q;
-  scanf("%lld",&Q);
-  std::vector<long long> a(N-1);
-  std::vector<long long> b(N-1);
-  for(int i = 0 ; i < N-1 ; i++){
-    scanf("%lld",&a[i]);
-    scanf("%lld",&b[i]);
-  }
-  std::vector<long long> p(Q);
-  std::vector<long long> x(Q);
-  for(int i = 0 ; i < Q ; i++){
-    scanf("%lld",&p[i]);
-    scanf("%lld",&x[i]);
+  ll N, Q;
+  cin >> N >> Q;
+
+  REP(i, 0, N - 1) {
+    int a, b;
+    cin >> a >> b;
+    a--, b--;
+    nodes[a].children.push_back(b);
+    nodes[b].children.push_back(a);
   }
 
+  REP(i, 0, Q) {
+    int p, x;
+    cin >> p >> x;
+    p--;
+    nodes[p].cost += x;
+  }
+
+  stack<int> s;
+  s.push(0);
+
+  ll cost = 0;
+  while (!s.empty()) {
+    int index = s.top();
+    s.pop();
+
+    if (nodes[index].used) {
+      cost -= nodes[index].cost;
+      continue;
+    }
+
+    cost += nodes[index].cost;
+    results[index] = cost;
+    nodes[index].used = true;
+
+    s.push(index);
+    for (int next : nodes[index].children) {
+      if (nodes[next].used) continue;
+      s.push(next);
+    }
+  }
+
+  string result;
+  REP(i, 0, N) { result += to_string(results[i]) + " "; }
+  result.pop_back();
+  cout << result << endl;
   return 0;
 }
 
