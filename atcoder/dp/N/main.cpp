@@ -45,22 +45,19 @@ int main(int argc, char* argv[]) {
   scan(v);
 
   REP(i, 0, n) { dp[i][i + 1] = ll_ll(v[i], 0); }
-
-  REP(i, 0, n + 1) {
+  REP(i, 2, n + 1) {
     REP(first, 0, n - i + 1) {
       int last = first + i;
-      if (i <= 1) continue;
 
       ll_ll result{INF, INF};
       REP(middle, first + 1, last) {
         ll_ll v1 = dp[first][middle];
         ll_ll v2 = dp[middle][last];
-
         ll cost = v1.first + v2.first + v1.second + v2.second;
-        if (cost < result.second) {
-          result.first = v1.first + v2.first;
-          result.second = cost;
-        }
+
+        if (cost > result.second) continue;
+        result.first = v1.first + v2.first;
+        result.second = cost;
       }
 
       dp[first][last] = result;
