@@ -36,14 +36,26 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
+ll dp[100010];
+
 int main(int argc, char* argv[]) {
   long long N;
-  scanf("%lld",&N);
+  scanf("%lld", &N);
   std::vector<long long> h(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&h[i]);
+  for (int i = 0; i < N; i++) {
+    scanf("%lld", &h[i]);
+  }
+  Fill(dp, INF);
+  dp[0] = 0;
+
+  REP(i, 1, N) {
+    ll s1 = i - 1 < 0 ? INF : abs(h[i - 1] - h[i]);
+    ll s2 = i - 2 < 0 ? INF : abs(h[i - 2] - h[i]);
+    if (i > 0) chmin(dp[i], dp[i - 1] + s1);
+    if (i > 1) chmin(dp[i], dp[i - 2] + s2);
   }
 
+  cout << dp[N - 1] << endl;
   return 0;
 }
 
