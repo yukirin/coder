@@ -37,16 +37,31 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
+ll dp[21 + 1][1 << 21];
+
 int main(int argc, char* argv[]) {
   long long N;
-  scanf("%lld",&N);
+  scanf("%lld", &N);
   std::vector<std::vector<long long>> a(N, std::vector<long long>(N));
-  for(int i = 0 ; i < N ; i++){
-    for(int j = 0 ; j < N ; j++){
-      scanf("%lld",&a[i][j]);
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
+      scanf("%lld", &a[i][j]);
     }
   }
 
+  dp[0][0] = 1;
+  REP(i, 0, N) {
+    REP(j, 0, 1 << N) {
+      if (i != __builtin_popcount(j)) continue;
+      REP(k, 0, N) {
+        int mask = 1 << k;
+        if (mask & j || !a[i][k]) continue;
+        dp[i + 1][j | mask] = (dp[i + 1][j | mask] + dp[i][j]) % MOD;
+      }
+    }
+  }
+
+  cout << dp[N][(1 << N) - 1] << endl;
   return 0;
 }
 
