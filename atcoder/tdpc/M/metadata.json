@@ -1,0 +1,13 @@
+{
+ "code_filename": "main.cpp",
+ "lang": "cpp",
+ "problem": {
+  "alphabet": "M",
+  "contest": {
+   "contest_id": "tdpc"
+  },
+  "problem_id": "tdpc_house"
+ },
+ "sample_in_pattern": "in_*.txt",
+ "sample_out_pattern": "out_*.txt"
+}
