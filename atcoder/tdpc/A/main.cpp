@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -36,14 +36,25 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
+bool dp[110][10100];
+
 int main(int argc, char* argv[]) {
   long long N;
-  scanf("%lld",&N);
+  scanf("%lld", &N);
   std::vector<long long> p(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&p[i]);
+  for (int i = 0; i < N; i++) {
+    scanf("%lld", &p[i]);
   }
 
+  dp[0][0] = true;
+  rep(i, 0, N) {
+    rep(j, 0, 10000) {
+      dp[i + 1][j + p[i]] |= dp[i][j];
+      dp[i + 1][j] |= dp[i][j];
+    }
+  }
+
+  cout << count(all(dp[N]), true) << endl;
   return 0;
 }
 
