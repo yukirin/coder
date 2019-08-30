@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -36,20 +36,35 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
+ll dp[1010][1010];
+
 int main(int argc, char* argv[]) {
-  long long A;
-  scanf("%lld",&A);
-  long long B;
-  scanf("%lld",&B);
-  std::vector<long long> a(A);
-  for(int i = 0 ; i < A ; i++){
-    scanf("%lld",&a[i]);
-  }
-  std::vector<long long> b(B);
-  for(int i = 0 ; i < B ; i++){
-    scanf("%lld",&b[i]);
+  int a, b;
+  cin >> a >> b;
+  vector<int> v1(a), v2(b);
+  scan(v1);
+  scan(v2);
+
+  rep(i, 0, a + 1) rep(j, 0, b + 1) {
+    bool side = !bool(((a - i) + (b - j)) % 2);
+    if (i == 0 && j == 0) continue;
+    if (i == 0) {
+      dp[0][j] = dp[0][j - 1] + (v2[b - j] * side);
+      continue;
+    }
+    if (j == 0) {
+      dp[i][0] = dp[i - 1][0] + (v1[a - i] * side);
+      continue;
+    }
+
+    if (side) {
+      dp[i][j] = max(dp[i - 1][j] + v1[a - i], dp[i][j - 1] + v2[b - j]);
+    } else {
+      dp[i][j] = min(dp[i - 1][j], dp[i][j - 1]);
+    }
   }
 
+  cout << dp[a][b] << endl;
   return 0;
 }
 
