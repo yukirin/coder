@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -36,12 +36,41 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long D;
-  scanf("%lld",&D);
+double dp[101][70][50][40];
 
+int main(int argc, char* argv[]) {
+  ll n, d;
+  cin >> n >> d;
+  vector<ll> divs{2, 3, 5};
+  vector<int> counter{0, 0, 0};
+
+  dp[0][0][0][0] = 1;
+
+  rep(i, 0, sz(divs)) {
+    while (d % divs[i] == 0) {
+      d /= divs[i];
+      counter[i]++;
+    }
+  }
+
+  if (d != 1) {
+    cout << 0 << endl;
+    return 0;
+  }
+
+  rep(i, 0, n) rep(v2, 0, 70) rep(v3, 0, 50) rep(v5, 0, 40) {
+    if (dp[i][v2][v3][v5] == 0) continue;
+
+    double p = dp[i][v2][v3][v5] * (1.0 / 6.0);
+    dp[i + 1][v2][v3][v5] += p;
+    dp[i + 1][min(counter[0], v2 + 1)][v3][v5] += p;
+    dp[i + 1][v2][min(counter[1], v3 + 1)][v5] += p;
+    dp[i + 1][min(counter[0], v2 + 2)][v3][v5] += p;
+    dp[i + 1][v2][v3][min(counter[2], v5 + 1)] += p;
+    dp[i + 1][min(counter[0], v2 + 1)][min(counter[1], v3 + 1)][v5] += p;
+  }
+
+  cout << fixed << setprecision(9) << dp[n][counter[0]][counter[1]][counter[2]] << endl;
   return 0;
 }
 
