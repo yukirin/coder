@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -38,21 +38,32 @@ template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  std::vector<long long> A(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&A[i]);
+  int N;
+  scanf("%d", &N);
+  std::vector<int> A(N);
+  for (int i = 0; i < N; i++) {
+    scanf("%d", &A[i]);
   }
-  std::vector<long long> B(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&B[i]);
+  std::vector<int> B(N);
+  for (int i = 0; i < N; i++) {
+    scanf("%d", &B[i]);
   }
-  std::vector<long long> C(N-1);
-  for(int i = 0 ; i < N-1 ; i++){
-    scanf("%lld",&C[i]);
+  std::vector<int> C(N - 1);
+  for (int i = 0; i < N - 1; i++) {
+    scanf("%d", &C[i]);
   }
 
+  int ans = 0;
+  rep(i, 0, N - 1) {
+    int index = A[i] - 1;
+    ans += B[index];
+    if (A[i] + 1 == A[i + 1]) {
+      ans += C[index];
+    }
+  }
+  ans += B[A[N - 1] - 1];
+
+  cout << ans << endl;
   return 0;
 }
 
