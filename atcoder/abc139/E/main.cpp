@@ -23,7 +23,8 @@ using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
 
-static constexpr ll INF = 1LL << 60;
+static constexpr ll LL_INF = 1LL << 60;
+static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
 
@@ -46,7 +47,7 @@ int dfs(int i, int j) {
 
   int ret = 1;
   for (i_i p : edges[i][j]) {
-    if (visited[p.first][p.second] && memo[p.first][p.second] < 0) return memo[i][j] = 999999999;
+    if (visited[p.first][p.second] && memo[p.first][p.second] < 0) return memo[i][j] = I_INF;
     chmax(ret, dfs(p.first, p.second) + 1);
   }
 
@@ -78,7 +79,7 @@ int main(int argc, char* argv[]) {
     chmax(ans, dfs(i, j));
   }
 
-  cout << (ans >= 999999999 ? -1 : ans) << endl;
+  cout << (ans >= I_INF ? -1 : ans) << endl;
   return 0;
 }
 
