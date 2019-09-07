@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -39,12 +39,15 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 
 int main(int argc, char* argv[]) {
   long long N;
-  scanf("%lld",&N);
-  std::vector<long long> B(N-1);
-  for(int i = 0 ; i < N-1 ; i++){
-    scanf("%lld",&B[i]);
+  scanf("%lld", &N);
+  std::vector<long long> B(N - 1);
+  for (int i = 0; i < N - 1; i++) {
+    scanf("%lld", &B[i]);
   }
 
+  ll ans = B[0] + B[N - 2];
+  rep(i, 1, N - 1) { ans += min(B[i], B[i - 1]); }
+  cout << ans << endl;
   return 0;
 }
 
