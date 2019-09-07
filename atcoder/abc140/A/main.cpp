@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -39,8 +39,9 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 
 int main(int argc, char* argv[]) {
   long long N;
-  scanf("%lld",&N);
+  scanf("%lld", &N);
 
+  cout << int(pow(N, 3)) << endl;
   return 0;
 }
 
