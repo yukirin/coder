@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -38,13 +38,26 @@ template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long K;
-  scanf("%lld",&K);
-  std::string S;
-  std::cin >> S;
+  ll n, k;
+  cin >> n >> k;
+  string s;
+  cin >> s;
 
+  int h = 0;
+  rep(i, 0, n) {
+    if (s[i] == 'L') {
+      if (i == 0) continue;
+      if (s[i - 1] == 'L') h++;
+    }
+
+    if (s[i] == 'R') {
+      if (i == n - 1) continue;
+      if (s[i + 1] == 'R') h++;
+    }
+  }
+
+  h = min(n - 1, h + (k * 2));
+  cout << h << endl;
   return 0;
 }
 
