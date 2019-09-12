@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -37,12 +37,30 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long D;
-  scanf("%lld",&D);
-  long long N;
-  scanf("%lld",&N);
+ll dp[10010][2][105];
 
+int main(int argc, char* argv[]) {
+  ll d;
+  string n;
+  cin >> d >> n;
+
+  dp[0][0][0] = 1;
+
+  rep(i, 0, sz(n)) rep(smaller, 0, 2) rep(m, 0, d) {
+    int max_num = (smaller ? 10 : n[i] - '0');
+    rep(j, 0, max_num) {
+      int next_m = (m + j) % d;
+      dp[i + 1][1][next_m] += dp[i][smaller][m];
+      dp[i + 1][1][next_m] %= MOD;
+    }
+
+    if (smaller) continue;
+    int next_m = (m + max_num) % d;
+    dp[i + 1][0][next_m] += dp[i][0][m];
+    dp[i + 1][0][next_m] %= MOD;
+  }
+
+  cout << dp[sz(n)][0][0] + dp[sz(n)][1][0] - 1 << endl;
   return 0;
 }
 
