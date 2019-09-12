@@ -1,17 +1,17 @@
 #include <bits/stdc++.h>
 
-#define ALL(s) begin(s), end(s)
-#define RALL(s) rbegin(s), rend(s)
-#define REP(i, a, b) for (int i = (a); i < (b); i++)
-#define RREP(i, a, b) for (int i = (a); i >= (b); i--)
-
 #ifdef _DEBUG
-#define DEBUG(x) cout << "line: " << __LINE__ << ", func: " << __func__ << " ->  " << #x << " = " << x << endl
-#define INFILE freopen("input.txt", "r", stdin)
+#define debug(x) cerr << "line: " << __LINE__ << ", func: " << __func__ << " ->  " << #x << " = " << x << endl
 #else
-#define DEBUG(x)
-#define INFILE
+#define debug(x)
 #endif
+
+#define all(s) begin(s), end(s)
+#define rall(s) rbegin(s), rend(s)
+#define rep(i, a, b) for (int i = (a); i < (b); i++)
+#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define pb push_back
+#define sz(a) int((a).size())
 
 using namespace std;
 
@@ -23,55 +23,31 @@ using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
 
-static constexpr ll LL9_MOD = 1000000009LL;
-static constexpr ll LL7_MOD = 1000000007LL;
-static constexpr ll INF = 1LL << 60;
+static constexpr ll LL_INF = 1LL << 60;
+static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
+static constexpr ll MOD = 998244353;
 
 static map<type_index, const char* const> scanType = {
     {typeid(int), "%d"}, {typeid(ll), "%lld"}, {typeid(double), "%lf"}, {typeid(char), "%c"}};
 
 template <class T> static void scan(vector<T>& v);
-static void scan(vector<string>& v, bool isWord = true);
-template <class T> inline bool chmax(T& a, T b);
-template <class T> inline bool chmin(T& a, T b);
-template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val);
+[[maybe_unused]] static void scan(vector<string>& v, bool isWord = true);
+template <class T> static inline bool chmax(T& a, T b);
+template <class T> static inline bool chmin(T& a, T b);
+template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
 int main(int argc, char* argv[]) {
-  INFILE;
-
-  string s;
-  cin >> s;
-
-  ll l = s.size();
-  ll first = 0, last = 0;
-  vector<ll> result(l, 0);
-
-  char stop = 'L';
-
-  while (last < l) {
-    last++;
-    if (s[last] == stop || last == l) {
-      for (int i = first; i < last; i++) {
-        ll pivot = stop == 'L' ? last : first;
-        ll diff = abs(pivot - i);
-        ll pos = pivot - (diff % 2);
-        result[pos]++;
-      }
-
-      first = last;
-      stop = stop == 'L' ? 'R' : 'L';
-    }
+  long long N;
+  scanf("%lld",&N);
+  std::vector<long long> x(N);
+  std::vector<long long> y(N);
+  for(int i = 0 ; i < N ; i++){
+    scanf("%lld",&x[i]);
+    scanf("%lld",&y[i]);
   }
 
-  string ans;
-  for (ll v : result) {
-    ans += to_string(v);
-    ans += " ";
-  }
-  ans.pop_back();
-  cout << ans << endl;
   return 0;
 }
 
