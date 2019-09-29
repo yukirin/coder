@@ -91,5 +91,5 @@ ENV/
 template/
 input.txt
 .vs/
-.vscode/
+# .vscode/
 a.out
