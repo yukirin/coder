@@ -182,5 +182,24 @@
 			""
 		],
 		"description": "nCr mod p"
+	},
+	"binary_meguru": {
+		"prefix": "meguru",
+		"body": [
+			"",
+			"template <class T> T binary_meguru(T ok, T ng, std::function<bool(T)> solve) {",
+			"  while (abs(ok - ng) > 1) {",
+			"    T mid = (ok + ng) / 2;",
+			"    if (solve(mid))",
+			"      ok = mid;",
+			"    else",
+			"      ng = mid;",
+			"  }",
+			"",
+			"  return ok;",
+			"}",
+			""
+		],
+		"description": "めぐる式二分探索"
 	}
 }
