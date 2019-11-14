@@ -53,29 +53,8 @@ int main(int argc, char* argv[]) {
   scanf("%lld", &C);
 
   ll m = max(A, max(B, C));
-  A = m - A, B = m - B, C = m - C;
-  vector<ll> count;
-  for (ll num : {A, B, C}) {
-    if (num) count.pb(num);
-  }
-  if (sz(count) == 1) count.pb(0);
-  if (sz(count) == 0) {
-    put(0);
-    return 0;
-  }
-
-  if (count[0] % 2 == 1 && count[1] % 2 == 1) {
-    put(count[0] / 2 + count[1] / 2 + 1);
-    return 0;
-  }
-
-  if (count[0] % 2 == 0 && count[1] % 2 == 0) {
-    put((count[0] + count[1]) / 2);
-    return 0;
-  }
-
-  if (count[0] % 2 == 1) swap(count[0], count[1]);
-  put(count[0] / 2 + (count[1] + 1) / 2 + 1);
+  ll diff = 3 * m - (A + B + C);
+  put(diff / 2 + 2 * (diff % 2));
   return 0;
 }
 
