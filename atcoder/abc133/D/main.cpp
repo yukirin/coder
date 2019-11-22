@@ -42,15 +42,12 @@ int main(int argc, char* argv[]) {
   cin >> n;
   vector<ll> a(n);
   scan(a);
-
-  ll s = accumulate(all(a), 0LL);
-  ll sub = 0LL;
-  for (int i = 1; i < n; i += 2) sub += 2 * a[i];
-
   vector<ll> ans(n);
-  ans[0] = s - sub;
+  ans[0] = 0;
 
-  rrep(i, n, 1) { ans[i] = 2 * a[i] - ans[(i + 1) % n]; }
+  rep(i, 1, n) { ans[i] = (a[i - 1] - ans[i - 1] / 2) * 2; }
+  ans[0] += (a[n - 1] - ans[n - 1] / 2);
+  rep(i, 1, n) { ans[i] = (a[i - 1] - ans[i - 1] / 2) * 2; }
 
   string s_ans = "";
   rep(i, 0, n) s_ans += to_string(ans[i]) + " ";
