@@ -43,20 +43,20 @@ int main(int argc, char* argv[]) {
   vector<ll> a(n);
   scan(a);
 
+  ll s = accumulate(all(a), 0LL);
+  ll sub = 0LL;
+  for (int i = 1; i < n; i += 2) sub += 2 * a[i];
+
   vector<ll> ans(n);
-  ans[0] = accumulate(all(a), 0LL);
-  for (int i = 1; i < n; i += 2) {
-    ans[0] -= 2 * a[i];
-  }
+  ans[0] = s - sub;
 
-  rep(i, 1, n) { ans[i] = 2 * a[i - 1] - ans[i - 1]; }
+  rrep(i, n, 1) { ans[i] = 2 * a[i] - ans[(i + 1) % n]; }
 
-  string s;
-  for (ll num : ans) {
-    s += to_string(num) + " ";
-  }
-  s.pop_back();
-  cout << s << endl;
+  string s_ans = "";
+  rep(i, 0, n) s_ans += to_string(ans[i]) + " ";
+  s_ans.pop_back();
+
+  cout << s_ans << endl;
   return 0;
 }
 
