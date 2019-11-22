@@ -392,5 +392,35 @@
 			""
 		],
 		"description": "2次元累積和、矩形和を求める"
+	},
+	"Warshall Floyd": {
+		"prefix": "warshallfloyd",
+		"body": [
+			"",
+			"// warshall floyd (route restoration)",
+			"// ! init process -> adj[i][i] = 0, adj[i][j] = inf -> (add edge)",
+			"// ! init process -> next[i][j] = j",
+			"template <class T> void warshall_floyd(vector<vector<T>>& adj, vector<vector<int>>& next) {",
+			"  int s = sz(adj);",
+			"  for (int k = 0; k < s; k++) {",
+			"    for (int i = 0; i < s; i++) {",
+			"      for (int j = 0; j < s; j++) {",
+			"        if (adj[i][k] + adj[k][j] >= adj[i][j]) continue;",
+			"        adj[i][j] = adj[i][k] + adj[k][j];",
+			"        next[i][j] = next[i][k];",
+			"      }",
+			"    }",
+			"  }",
+			"}",
+			"",
+			"vector<int> route(int s, int g, vector<vector<int>>& next) {",
+			"  vector<int> path;",
+			"  for (int cur = s; cur != g; cur = next[cur][g]) path.pb(cur);",
+			"  path.pb(g);",
+			"  return path;",
+			"}",
+			""
+		],
+		"description": "全点対間最短路(経路復元付き)"
 	}
 }
