@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
@@ -41,30 +41,89 @@ template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long M;
-  scanf("%lld",&M);
-  long long L;
-  scanf("%lld",&L);
-  std::vector<long long> A(M);
-  std::vector<long long> B(M);
-  std::vector<long long> C(M);
-  for(int i = 0 ; i < M ; i++){
-    scanf("%lld",&A[i]);
-    scanf("%lld",&B[i]);
-    scanf("%lld",&C[i]);
-  }
-  long long Q;
-  scanf("%lld",&Q);
-  std::vector<long long> s(Q);
-  std::vector<long long> t(Q);
-  for(int i = 0 ; i < Q ; i++){
-    scanf("%lld",&s[i]);
-    scanf("%lld",&t[i]);
+template <class T> struct Edge {
+  int src, to;
+  T cost;
+
+  Edge(int to, T cost) : src(-1), to(to), cost(cost) {}
+  Edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}
+
+  Edge& operator=(const int& x) {
+    to = x;
+    return *this;
   }
 
+  operator int() const { return to; }
+};
+
+template <class T> using Edges = vector<Edge<T>>;
+template <class T> using WeightedGraph = vector<Edges<T>>;
+using UnWeightedGraph = vector<vector<int>>;
+template <class T> using Matrix = vector<vector<T>>;
+
+// warshall floyd (route restoration)
+// ! init process -> adj[i][i] = 0, adj[i][j] = inf -> (add edge)
+// ! init process -> next[i][j] = j
+template <class T> void warshall_floyd(Matrix<T>& adj, Matrix<int>& next) {
+  int s = sz(adj);
+  for (int k = 0; k < s; k++) {
+    for (int i = 0; i < s; i++) {
+      for (int j = 0; j < s; j++) {
+        if (adj[i][k] + adj[k][j] >= adj[i][j]) continue;
+        adj[i][j] = adj[i][k] + adj[k][j];
+        next[i][j] = next[i][k];
+      }
+    }
+  }
+}
+
+vector<int> route(int s, int g, Matrix<int>& next) {
+  vector<int> path;
+  for (int cur = s; cur != g; cur = next[cur][g]) path.pb(cur);
+  path.pb(g);
+  return path;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, m, l;
+  cin >> n >> m >> l;
+
+  Matrix<ll> adj(n, vector<ll>(n, LL_INF)), less_l(n, vector<ll>(n, LL_INF));
+  rep(i, 0, n) adj[i][i] = less_l[i][i] = 0;
+  Matrix<int> next(n, vector<int>(n, I_INF));
+  rep(i, 0, n) rep(j, 0, n) next[i][j] = j;
+
+  rep(i, 0, m) {
+    int a, b;
+    ll c;
+    cin >> a >> b >> c;
+    a--, b--;
+    if (c > l) continue;
+    adj[a][b] = adj[b][a] = c;
+  }
+  ll q;
+  cin >> q;
+  vector<int> s(q), t(q);
+  rep(i, 0, q) {
+    scanf("%d", &s[i]);
+    scanf("%d", &t[i]);
+    s[i]--, t[i]--;
+  }
+
+  warshall_floyd(adj, next);
+  rep(i, 0, n) rep(j, 0, n) {
+    if (adj[i][j] > l) continue;
+    less_l[i][j] = 1;
+  }
+  warshall_floyd(less_l, next);
+  rep(i, 0, q) {
+    int start = s[i], goal = t[i];
+    if (less_l[start][goal] == LL_INF) {
+      put(-1);
+      continue;
+    }
+    put(less_l[start][goal] - 1);
+  }
   return 0;
 }
 
@@ -113,13 +172,9 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
-template <class T> inline T lcm(T a, T b) {
-  return (a * b) / gcd(a, b);
-}
+template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
