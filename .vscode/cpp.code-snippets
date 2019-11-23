@@ -422,5 +422,32 @@
 			""
 		],
 		"description": "全点対間最短路(経路復元付き)"
+	},
+	"Graph Template": {
+		"prefix": "graph",
+		"body": [
+			"",
+			"template <class T> struct Edge {",
+			"  int src, to;",
+			"  T cost;",
+			"",
+			"  Edge(int to, T cost) : src(-1), to(to), cost(cost) {}",
+			"  Edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}",
+			"",
+			"  Edge& operator=(const int& x) {",
+			"    to = x;",
+			"    return *this;",
+			"  }",
+			"",
+			"  operator int() const { return to; }",
+			"};",
+			"",
+			"template <class T> using Edges = vector<Edge<T>>;",
+			"template <class T> using WeightedGraph = vector<Edges<T>>;",
+			"using UnWeightedGraph = vector<vector<int>>;",
+			"template <class T> using Matrix = vector<vector<T>>;",
+			""
+		],
+		"description": "Graph Template"
 	}
 }
