@@ -513,5 +513,22 @@
 			""
 		],
 		"description": "しゃくとり法"
+	},
+	"Kruskal": {
+		"prefix": "kruskal",
+		"body": [
+			"",
+			"template <class T> T kruskal(Edges<T>& edges, int V) {",
+			"  sort(begin(edges), end(edges), [](const Edge<T>& a, const Edge<T>& b) { return (a.cost < b.cost); });",
+			"  UnionFind tree(V);",
+			"  T ret = 0;",
+			"  for (auto& e : edges) {",
+			"    if (tree.unite(e.src, e.to)) ret += e.cost;",
+			"  }",
+			"  return (ret);",
+			"}",
+			""
+		],
+		"description": "最小全域木"
 	}
 }
