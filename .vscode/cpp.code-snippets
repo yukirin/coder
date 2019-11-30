@@ -626,5 +626,26 @@
 			""
 		],
 		"description": "セグメント木"
+	},
+	"Nimk": {
+		"prefix": "nimk",
+		"body": [
+			"",
+			"// @return: true -> play first win, false -> play first lose",
+			"bool Nimk(int k, vector<ll>& grundy_nums) {",
+			"  for (int x = 0; x < 61; x++) {",
+			"    int sum = 0;",
+			"    ll digit = 1LL << x;",
+			"    for (ll num : grundy_nums) {",
+			"      if (!(num & digit)) continue;",
+			"      sum++;",
+			"    }",
+			"    if (sum % (k + 1)) return true;",
+			"  }",
+			"  return false;",
+			"}",
+			""
+		],
+		"description": "Nimk, 一般的なNimはk = 1"
 	}
 }
