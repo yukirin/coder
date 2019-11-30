@@ -47,6 +47,20 @@ template <class T> T mod(T a, T m);
 int main(int argc, char* argv[]) {
   int n;
   cin >> n;
+  vector<int> stones(n), move{2, 3, 5};
+  scan(stones);
+
+  for (int stone : stones) {
+    bool dp[200];
+    Fill(dp, false);
+    rep(i, 1, stone + 1) {
+      for (int m : move) {
+        if (i - m < 0) continue;
+        dp[i] |= !dp[i - m];
+      }
+    }
+    put(dp[stone] ? "First" : "Second");
+  }
   return 0;
 }
 
