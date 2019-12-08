@@ -53,25 +53,40 @@ int main(int argc, char* argv[]) {
   scan(v);
 
   ll time = accumulate(all(t), 0LL);
-  vec<double> course(time * 2 + 1, 0.0), v_limit(time * 2 + 1, 0.0);
+  vec<double> course(time * 2 + 1, 0LL), v_limit(time * 2 + 1, 0LL);
   int index = 1;
   rep(i, 0, n) {
     double cur_t = t[i], cur_v = v[i];
+    if (i != 0 && cur_v < v_limit[index - 1]) v_limit[index - 1] = cur_v;
     rep(j, index, index + cur_t * 2) v_limit[j] = cur_v;
     index += cur_t * 2;
   }
-  rep(i, 1, time * 2) {
-    if (v_limit[i] >= v_limit[i - 1]) continue;
-    v_limit[i - 1] = v_limit[i];
-  }
   v_limit[0] = v_limit[time * 2] = 0;
-  rep(i, 1, time * 2) { course[i] = min(course[i - 1] + 0.5, v_limit[i]); }
-  rrep(i, time * 2, 1) { course[i] = min(course[i + 1] + 0.5, min(course[i], v_limit[i])); }
+
+  rep(i, 1, time * 2) {
+    for (double accele : {0.5, 0.0, -0.5}) {
+      course[i] = course[i - 1] + accele;
+      int last = min(i + ll(course[i] * 2) + 1, time * 2 + 1);
+      bool in = true;
+      rep(j, i, last) {
+        if (j != i) course[j] = max(course[j - 1] - 0.5, 0.0);
+        if (course[j] <= v_limit[j]) continue;
+        in = false;
+        break;
+      }
+
+      if (in) break;
+    }
+  }
 
   double ans = 0;
   rep(i, 1, time * 2 + 1) {
+    if (course[i] == course[i - 1]) {
+      ans += course[i] * 0.5;
+      continue;
+    }
+
     ans += course[i] * 0.5;
-    if (course[i] == course[i - 1]) continue;
     ans += (course[i] > course[i - 1]) ? -0.125 : 0.125;
   }
   putf(ans, 9);
