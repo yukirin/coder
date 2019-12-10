@@ -46,30 +46,18 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
-ll memo[300005][62];
-
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld", &N);
-  std::vector<long long> A(N);
-  for (int i = 0; i < N; i++) {
-    scanf("%lld", &A[i]);
-  }
-
-  rep(i, 0, N) {
-    ll num = A[i];
-    rep(j, 0, 62) { memo[i + 1][j] = memo[i][j] + bool(num & (1LL << j)); }
-  }
+  ll N;
+  cin >> N;
+  vec<ll> A(N);
+  for (int i = 0; i < N; i++) scanf("%lld", &A[i]);
 
   ll ans = 0;
-  rep(i, 0, N - 1) {
-    rep(j, 0, 62) {
-      bool reverse = A[i] & (1LL << j);
-      ll count = memo[N][j] - memo[i + 1][j];
-      if (reverse) count = (N - i - 1) - count;
-      ans += mod((1LL << j) % MOD * count, MOD);
-      ans %= MOD;
-    }
+  rep(i, 0, 62) {
+    int count = count_if(all(A), [i](auto num) { return num & (1LL << i); });
+
+    ans += (mod(1LL << i, MOD) * mod((N - count) * count, MOD)) % MOD;
+    ans = mod(ans, MOD);
   }
 
   put(ans);
