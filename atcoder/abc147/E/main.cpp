@@ -9,12 +9,12 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
-#define deg2rad(x) (((x) * PI) / (180.0))
+#define deg2rad(x) (((x)*PI) / (180.0))
 #define rad2deg(x) (((x) * (180.0)) / PI)
 
 using namespace std;
@@ -45,22 +45,46 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
+bool dp[80][80][6410];
+
 int main(int argc, char* argv[]) {
   long long H;
-  scanf("%lld",&H);
+  scanf("%lld", &H);
   long long W;
-  scanf("%lld",&W);
+  scanf("%lld", &W);
   std::vector<std::vector<long long>> A(H, std::vector<long long>(W));
-  for(int i = 0 ; i < H ; i++){
-    for(int j = 0 ; j < W ; j++){
-      scanf("%lld",&A[i][j]);
+  for (int i = 0; i < H; i++) {
+    for (int j = 0; j < W; j++) {
+      scanf("%lld", &A[i][j]);
     }
   }
   std::vector<std::vector<long long>> B(H, std::vector<long long>(W));
-  for(int i = 0 ; i < H ; i++){
-    for(int j = 0 ; j < W ; j++){
-      scanf("%lld",&B[i][j]);
+  for (int i = 0; i < H; i++) {
+    for (int j = 0; j < W; j++) {
+      scanf("%lld", &B[i][j]);
     }
+  }
+
+  dp[0][0][abs(A[0][0] - B[0][0])] = true;
+  rep(i, 0, H) rep(j, 0, W) {
+    rep(k, 0, 6410) {
+      ll diff = abs(A[i][j] - B[i][j]);
+      if (i != 0) {
+        dp[i][j][k] |= dp[i - 1][j][int(abs(k - diff))];
+        if (k + diff < 6410) dp[i][j][k] |= dp[i - 1][j][k + diff];
+      }
+
+      if (j != 0) {
+        dp[i][j][k] |= dp[i][j - 1][int(abs(k - diff))];
+        if (k + diff < 6410) dp[i][j][k] |= dp[i][j - 1][k + diff];
+      }
+    }
+  }
+
+  rep(i, 0, 6410) {
+    if (!dp[H - 1][W - 1][i]) continue;
+    put(i);
+    return 0;
   }
 
   return 0;
@@ -111,18 +135,12 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
-template <class T> inline T lcm(T a, T b) {
-  return (a * b) / gcd(a, b);
-}
+template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
 
-template <class T> T mod(T a, T m) {
-  return (a % m + m) % m;
-}
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
