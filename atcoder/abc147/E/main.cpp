@@ -45,7 +45,7 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
-bool dp[80][80][6410];
+bool dp[80][80][6500];
 
 int main(int argc, char* argv[]) {
   long long H;
@@ -67,21 +67,21 @@ int main(int argc, char* argv[]) {
 
   dp[0][0][abs(A[0][0] - B[0][0])] = true;
   rep(i, 0, H) rep(j, 0, W) {
-    rep(k, 0, 6410) {
+    rep(k, 0, 6500) {
       ll diff = abs(A[i][j] - B[i][j]);
       if (i != 0) {
         dp[i][j][k] |= dp[i - 1][j][int(abs(k - diff))];
-        if (k + diff < 6410) dp[i][j][k] |= dp[i - 1][j][k + diff];
+        if (k + diff < 6500) dp[i][j][k] |= dp[i - 1][j][k + diff];
       }
 
       if (j != 0) {
         dp[i][j][k] |= dp[i][j - 1][int(abs(k - diff))];
-        if (k + diff < 6410) dp[i][j][k] |= dp[i][j - 1][k + diff];
+        if (k + diff < 6500) dp[i][j][k] |= dp[i][j - 1][k + diff];
       }
     }
   }
 
-  rep(i, 0, 6410) {
+  rep(i, 0, 6500) {
     if (!dp[H - 1][W - 1][i]) continue;
     put(i);
     return 0;
