@@ -314,13 +314,15 @@
 		"prefix": "timer",
 		"body": [
 			"",
-			"  auto start = chrono::system_clock::now();",
+			"  {",
+			"    auto start = chrono::system_clock::now();",
 			"",
-			"  // ! Implement processing",
+			"    // ! Implement processing",
 			"",
-			"  auto end = chrono::system_clock::now();",
-			"  auto msec = chrono::duration_cast<chrono::milliseconds>(end - start).count();",
-			"  cout << msec << \"[ms]\\n\";",
+			"    auto end = chrono::system_clock::now();",
+			"    auto msec = chrono::duration_cast<chrono::milliseconds>(end - start).count();",
+			"    cout << msec << \"[ms]\\n\";",
+			"  }",
 			""
 		],
 		"description": "処理時間の計測"
