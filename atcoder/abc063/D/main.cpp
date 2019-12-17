@@ -63,6 +63,8 @@ template <class T> T binary_meguru(T ok, T ng, std::function<bool(T)> solve) {
 bool check(ll count) {
   ll ret = count;
   for (ll num : h) {
+    // x + y = count
+    // ax + by >= h[i]
     num -= b * count;
     double ans = double(num) / (a - b);
     ans = ceil(max(0.0, ans));
