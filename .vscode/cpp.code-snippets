@@ -697,5 +697,28 @@
 			""
 		],
 		"description": "座標圧縮(2次元)"
+	},
+	"BellmanFord": {
+		"prefix": "bellmanford",
+		"body": [
+			"",
+			"template <class T> vector<T> bellman_ford(Edges<T>& edges, int V, int s, T inf) {",
+			"  vector<T> dist(V, inf);",
+			"  dist[s] = 0;",
+			"  for (int i = 0; i < V - 1; i++) {",
+			"    for (auto& e : edges) {",
+			"      if (dist[e.src] == inf) continue;",
+			"      dist[e.to] = min(dist[e.to], dist[e.src] + e.cost);",
+			"    }",
+			"  }",
+			"  for (auto& e : edges) {",
+			"    if (dist[e.src] == inf) continue;",
+			"    if (dist[e.src] + e.cost < dist[e.to]) return vector<T>();",
+			"  }",
+			"  return dist;",
+			"}",
+			""
+		],
+		"description": "単一始点全点間最短路(負閉路検出=空vector)"
 	}
 }
