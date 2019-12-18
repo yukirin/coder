@@ -720,5 +720,36 @@
 			""
 		],
 		"description": "単一始点全点間最短路(負閉路検出=空vector)"
+	},
+	"TopologicalSort": {
+		"prefix": "topologicalsort",
+		"body": [
+			"",
+			"// @return -> not DAG if empty vector",
+			"vector<int> topological_sort(UnWeightedGraph& adj_list) {",
+			"  int v = sz(adj_list);",
+			"  vec<int> ans;",
+			"  vec<ll> counter(v, 0LL);",
+			"  stack<int> st;",
+			"  rep(i, 0, v) for (int to : adj_list[i]) counter[to]++;",
+			"  rep(i, 0, v) if (counter[i] == 0LL) st.push(i);",
+			"",
+			"  while (st.size()) {",
+			"    int cur = st.top();",
+			"    st.pop();",
+			"    ans.pb(cur);",
+			"",
+			"    for (int to : adj_list[cur]) {",
+			"      counter[to]--;",
+			"      if (counter[to] == 0LL) st.push(to);",
+			"    }",
+			"  }",
+			"",
+			"  if (sz(ans) != v) return vec<int>();",
+			"  return ans;",
+			"}",
+			""
+		],
+		"description": "トポロジカルソート(閉路検出付)"
 	}
 }
