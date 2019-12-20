@@ -21,6 +21,7 @@ using namespace std;
 
 using ll = long long;
 using ull = unsigned long long;
+using ld = long double;
 using i_i = pair<int, int>;
 using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
@@ -77,17 +78,17 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  long double max_avg = 0.0;
+  ld max_avg = 0.0;
   rep(i, a, b + 1) {
     ll value = dp[n][i].first;
-    long double avg = static_cast<long double>(value) / i;
+    ld avg = ld(value) / i;
     chmax(max_avg, avg);
   }
 
   ll sum = 0;
   rep(i, a, b + 1) {
     ll value = dp[n][i].first;
-    long double avg = static_cast<long double>(value) / i;
+    ld avg = ld(value) / i;
     if (abs(max_avg - avg) <= EPS) sum += dp[n][i].second;
   }
   putf(max_avg, 20);
