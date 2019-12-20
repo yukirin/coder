@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <quadmath.h>
 
 #ifdef _DEBUG
 #define debug(x) cerr << "line: " << __LINE__ << ", func: " << __func__ << " ->  " << #x << " = " << x << endl
@@ -78,22 +77,20 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  __float128 max_avg = 0.0;
+  long double max_avg = 0.0;
   rep(i, a, b + 1) {
     ll value = dp[n][i].first;
-    __float128 avg = __float128(value) / i;
-    if (avg > max_avg) max_avg = avg;
-    // chmax(max_avg, avg);
+    long double avg = static_cast<long double>(value) / i;
+    chmax(max_avg, avg);
   }
 
   ll sum = 0;
   rep(i, a, b + 1) {
     ll value = dp[n][i].first;
-    __float128 avg = __float128(value) / i;
-    // if (abs<__float128>(max_avg - avg) <= EPS) sum += dp[n][i].second;
-    if (max_avg == avg) sum += dp[n][i].second;
+    long double avg = static_cast<long double>(value) / i;
+    if (abs(max_avg - avg) <= EPS) sum += dp[n][i].second;
   }
-  putf(double(max_avg), 20);
+  putf(max_avg, 20);
   put(sum);
 
   return 0;
