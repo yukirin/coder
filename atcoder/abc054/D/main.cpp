@@ -47,7 +47,6 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 template <class T> T mod(T a, T m);
 
 ll dp[41][410][410];
-ll gcd_table[410][410];
 
 int main(int argc, char* argv[]) {
   ll n, ma, mb;
@@ -58,7 +57,6 @@ int main(int argc, char* argv[]) {
   Fill(dp, LL_INF);
   dp[0][0][0] = 0;
 
-  rep(i, 0, 410) rep(j, 0, 410) gcd_table[i][j] = gcd(i, j);
   rep(i, 0, n) rep(j, 0, 410) rep(k, 0, 410) {
     if (dp[i][j][k] == LL_INF) continue;
     chmin(dp[i + 1][j][k], dp[i][j][k]);
@@ -68,14 +66,7 @@ int main(int argc, char* argv[]) {
   ll ans = LL_INF;
   rep(i, 1, 401) rep(j, 1, 401) {
     if (dp[n][i][j] == LL_INF) continue;
-
-    int ag = i, bg = j;
-    while (gcd_table[ag][bg] != 1) {
-      ll div = gcd_table[ag][bg];
-      ag /= div, bg /= div;
-    }
-
-    if (ag != ma || bg != mb) continue;
+    if (i * mb != j * ma) continue;
     chmin(ans, dp[n][i][j]);
   }
 
