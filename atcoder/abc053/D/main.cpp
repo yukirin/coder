@@ -55,13 +55,12 @@ int main(int argc, char* argv[]) {
   map<ll, ll> c;
   rep(i, 0, n) { c[a[i]]++; }
 
-  ll uniq = 0, two = 0;
+  ll two = 0;
   for (auto& p : c) {
     if (p.second % 2 == 0) two += 1;
-    uniq += 1;
   }
 
-  put(uniq - (two % 2));
+  put(sz(c) - (two % 2));
   return 0;
 }
 
