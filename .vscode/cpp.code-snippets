@@ -771,5 +771,16 @@
 			""
 		],
 		"description": "nCrTable(二項係数テーブル)"
+	},
+	"Sum1D": {
+		"prefix": "sum1d",
+		"body": [
+			"",
+			"  // ! sum [left, right) = (a[left] + ... + a[right - 1]) -> s[right] - s[left]",
+			"  vec<ll> s(n + 1, 0);",
+			"  rep(i, 0, n) s[i + 1] = s[i] + a[i];",
+			""
+		],
+		"description": "累積和"
 	}
 }
