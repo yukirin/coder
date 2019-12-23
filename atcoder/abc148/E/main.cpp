@@ -55,14 +55,13 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  ll count = N / 2;
-  ll zero_count = 0;
-  ll div = 5;
-  while (div <= count) {
-    zero_count += count / div;
+  ll k = N / 2;
+  ll count = 0, div = 5;
+  while (div <= k) {
+    count += k / div;
     div *= 5;
   }
-  put(zero_count);
+  put(count);
   return 0;
 }
 
