@@ -64,12 +64,7 @@ int main(int argc, char* argv[]) {
   }
 
   ll ans = 0;
-  rep(i, 1, n + 1) rep(value, 0, 2501) {
-    if (dp[n][i][value] == 0) continue;
-    if (i * a != value) continue;
-    ans += dp[n][i][value];
-  }
-
+  rep(i, 1, n + 1) ans += dp[n][i][i * a];
   put(ans);
   return 0;
 }
