@@ -161,7 +161,7 @@
 			"static constexpr int MAX = 510000;",
 			"ll fac[MAX], finv[MAX], inv[MAX];",
 			"",
-			"// 前処理",
+			"// preprocess",
 			"void comb_init() {",
 			"  fac[0] = fac[1] = 1;",
 			"  finv[0] = finv[1] = 1;",
