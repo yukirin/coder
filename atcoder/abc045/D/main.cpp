@@ -51,34 +51,23 @@ int main(int argc, char* argv[]) {
   cin >> h >> w >> n;
   vec<int> a(n), b(n);
 
-  map<i_i, bool> black, visited;
+  map<i_i, int> cnt;
   for (int i = 0; i < n; i++) {
     scanf("%d %d", &a[i], &b[i]);
     a[i]--, b[i]--;
-    black[make_pair(a[i], b[i])] = true;
   }
 
   vec<ll> ans(10);
   rep(i, 0, n) {
-    i_i pivot{a[i], b[i]};
     rep(c_h, -2, 1) rep(c_w, -2, 1) {
-      i_i corner{pivot.first + c_h, pivot.second + c_w};
-      ll count = 0;
-
-      if (visited[corner]) continue;
+      i_i corner{a[i] + c_h, b[i] + c_w};
       if (corner.first < 0 || corner.second < 0) continue;
       if (corner.first > h - 3 || corner.second > w - 3) continue;
-      visited[corner] = true;
-
-      rep(offset_x, 0, 3) rep(offset_y, 0, 3) {
-        i_i pos{corner.first + offset_x, corner.second + offset_y};
-        if (black[pos]) count++;
-      }
-
-      ans[count]++;
+      cnt[corner]++;
     }
   }
-  ans[0] = 0;
+
+  for (auto p : cnt) ans[p.second]++;
   ans[0] = (h - 2) * (w - 2) - accumulate(all(ans), 0LL);
 
   rep(i, 0, 10) put(ans[i]);
