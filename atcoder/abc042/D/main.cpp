@@ -72,16 +72,13 @@ ll comb(int n, int k) {
 int main(int argc, char* argv[]) {
   ll h, w, a, b;
   cin >> h >> w >> a >> b;
+  comb_init();
 
   ll ans = 0;
-  comb_init();
-  vec<ll> how(h - a);
-  rep(i, 0, sz(how)) {
+  rep(i, 0, h - a) {
     ll first = comb((b - 1) + i, i);
     ll second = comb((w - b - 1) + (h - 1 - i), (h - 1 - i));
-
-    ans += mod(first * second, MOD);
-    ans = mod(ans, MOD);
+    (ans += mod(first * second, MOD)) %= MOD;
   }
 
   put(ans);
