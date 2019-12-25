@@ -26,6 +26,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -49,7 +50,27 @@ int main(int argc, char* argv[]) {
   cin >> n >> k;
   std::vector<long long> a(n);
   scan(a);
+  rep(i, 0, n) a[i]--;
 
+  // ! sum [left, right) = (a[left] + ... + a[right - 1]) -> s[right] - s[left]
+  vec<ll> s(n + 1, 0);
+  rep(i, 0, n) s[i + 1] = s[i] + a[i];
+  rep(i, 0, n + 1) s[i] %= k;
+
+  map<int, vec<int>> cnt;
+  rep(i, 0, n + 1) cnt[s[i]].pb(i);
+
+  ll ans = 0;
+  for (auto p : cnt) {
+    if (sz(p.second) < 2) continue;
+    rep(i, 0, sz(p.second)) {
+      int e = p.second[i] + k;
+      int dist = lower_bound(all(p.second), e) - (begin(p.second) + i);
+      ans += dist - 1;
+    }
+  }
+
+  put(ans);
   return 0;
 }
 
