@@ -48,27 +48,16 @@ template <class T> T mod(T a, T m);
 bool dp[80][80][6500];
 
 int main(int argc, char* argv[]) {
-  long long H;
-  scanf("%lld", &H);
-  long long W;
-  scanf("%lld", &W);
-  std::vector<std::vector<long long>> A(H, std::vector<long long>(W));
-  for (int i = 0; i < H; i++) {
-    for (int j = 0; j < W; j++) {
-      scanf("%lld", &A[i][j]);
-    }
-  }
-  std::vector<std::vector<long long>> B(H, std::vector<long long>(W));
-  for (int i = 0; i < H; i++) {
-    for (int j = 0; j < W; j++) {
-      scanf("%lld", &B[i][j]);
-    }
-  }
+  ll h, w;
+  cin >> h >> w;
+  vec<vec<ll>> a(h, vec<ll>(w)), b(h, vec<ll>(w));
+  rep(i, 0, h) rep(j, 0, w) scanf("%lld", &a[i][j]);
+  rep(i, 0, h) rep(j, 0, w) scanf("%lld", &b[i][j]);
 
-  dp[0][0][abs(A[0][0] - B[0][0])] = true;
-  rep(i, 0, H) rep(j, 0, W) {
+  dp[0][0][abs(a[0][0] - b[0][0])] = true;
+  rep(i, 0, h) rep(j, 0, w) {
     rep(k, 0, 6500) {
-      ll diff = abs(A[i][j] - B[i][j]);
+      ll diff = abs(a[i][j] - b[i][j]);
       if (i != 0) {
         dp[i][j][k] |= dp[i - 1][j][int(abs(k - diff))];
         if (k + diff < 6500) dp[i][j][k] |= dp[i - 1][j][k + diff];
@@ -82,7 +71,7 @@ int main(int argc, char* argv[]) {
   }
 
   rep(i, 0, 6500) {
-    if (!dp[H - 1][W - 1][i]) continue;
+    if (!dp[h - 1][w - 1][i]) continue;
     put(i);
     return 0;
   }
