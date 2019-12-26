@@ -14,6 +14,8 @@
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -24,6 +26,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -61,69 +64,46 @@ template <class T> using WeightedGraph = vector<Edges<T>>;
 using UnWeightedGraph = vector<vector<int>>;
 template <class T> using Matrix = vector<vector<T>>;
 
-// warshall floyd (route restoration)
 // ! init process -> adj[i][i] = 0, adj[i][j] = inf -> (add edge)
-// ! init process -> next[i][j] = j
-template <class T> void warshall_floyd(Matrix<T>& adj, Matrix<int>& next) {
+template <class T> void warshall_floyd(Matrix<T>& adj) {
   int s = sz(adj);
   for (int k = 0; k < s; k++) {
     for (int i = 0; i < s; i++) {
       for (int j = 0; j < s; j++) {
         if (adj[i][k] + adj[k][j] >= adj[i][j]) continue;
         adj[i][j] = adj[i][k] + adj[k][j];
-        next[i][j] = next[i][k];
       }
     }
   }
 }
 
-vector<int> route(int s, int g, Matrix<int>& next) {
-  vector<int> path;
-  for (int cur = s; cur != g; cur = next[cur][g]) path.pb(cur);
-  path.pb(g);
-  return path;
-}
-
 int main(int argc, char* argv[]) {
   ll n, m, l;
   cin >> n >> m >> l;
-
-  Matrix<ll> adj(n, vector<ll>(n, LL_INF)), less_l(n, vector<ll>(n, LL_INF));
-  rep(i, 0, n) adj[i][i] = less_l[i][i] = 0;
-  Matrix<int> next(n, vector<int>(n, I_INF));
-  rep(i, 0, n) rep(j, 0, n) next[i][j] = j;
+  Matrix<ll> adj(n, vector<ll>(n, LL_INF)), adj2(n, vec<ll>(n, LL_INF));
+  rep(i, 0, n) adj[i][i] = adj2[i][i] = 0;
 
   rep(i, 0, m) {
-    int a, b;
-    ll c;
+    int a, b, c;
     cin >> a >> b >> c;
     a--, b--;
     if (c > l) continue;
     adj[a][b] = adj[b][a] = c;
   }
+
   ll q;
   cin >> q;
-  vector<int> s(q), t(q);
+  vec<int> s(q), t(q);
   rep(i, 0, q) {
-    scanf("%d", &s[i]);
-    scanf("%d", &t[i]);
+    scanf("%d %d", &s[i], &t[i]);
     s[i]--, t[i]--;
   }
 
-  warshall_floyd(adj, next);
-  rep(i, 0, n) rep(j, 0, n) {
-    if (adj[i][j] > l) continue;
-    less_l[i][j] = 1;
-  }
-  warshall_floyd(less_l, next);
-  rep(i, 0, q) {
-    int start = s[i], goal = t[i];
-    if (less_l[start][goal] == LL_INF) {
-      put(-1);
-      continue;
-    }
-    put(less_l[start][goal] - 1);
-  }
+  warshall_floyd(adj);
+  rep(i, 0, n) rep(j, 0, n) if (adj[i][j] <= l) adj2[i][j] = 1;
+  warshall_floyd(adj2);
+
+  rep(i, 0, q) { put(adj2[s[i]][t[i]] == LL_INF ? -1 : adj2[s[i]][t[i]] - 1); }
   return 0;
 }
 
