@@ -40,7 +40,66 @@ template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-ll dp[5005][5005];
+class RollingHash {
+  static constexpr ll base1 = 1009LL;
+  static constexpr ll base2 = 2009LL;
+  static constexpr ll mod1 = 1000000007LL;
+  static constexpr ll mod2 = 1000000009LL;
+  vector<ll> hash1, hash2, pow1, pow2;
+
+ public:
+  RollingHash(const string& S) {
+    int n = (int)S.size();
+    hash1.assign(n + 1, 0);
+    hash2.assign(n + 1, 0);
+    pow1.assign(n + 1, 1);
+    pow2.assign(n + 1, 1);
+    for (int i = 0; i < n; ++i) {
+      hash1[i + 1] = (hash1[i] * base1 + S[i]) % mod1;
+      hash2[i + 1] = (hash2[i] * base2 + S[i]) % mod2;
+      pow1[i + 1] = (pow1[i] * base1) % mod1;
+      pow2[i + 1] = (pow2[i] * base2) % mod2;
+    }
+  }
+
+  // S の [l, r) のハッシュ値を返す
+  inline pair<ll, ll> get(int l, int r) const {
+    ll res1 = hash1[r] - hash1[l] * pow1[r - l] % mod1;
+    if (res1 < 0) res1 += mod1;
+    ll res2 = hash2[r] - hash2[l] * pow2[r - l] % mod2;
+    if (res2 < 0) res2 += mod2;
+    return make_pair(res1, res2);
+  }
+
+  // S のハッシュ値を返す
+  inline pair<ll, ll> hash() const { return get(0, (int)hash1.size() - 1); }
+
+  // LCP (Longest Common Prefix) [a, sz(S)), [b, sz(S))
+  inline int getLCP(int a, int b) const {
+    int len = min((int)hash1.size() - a, (int)hash1.size() - b);
+    int low = 0, high = len;
+    while (high - low > 1) {
+      int mid = (low + high) >> 1;
+      if (get(a, a + mid) != get(b, b + mid))
+        high = mid;
+      else
+        low = mid;
+    }
+    return low;
+  }
+
+  // hash h1 と 長さ h2_len の文字列の hash h2 を結合
+  pair<ll, ll> concat(pair<ll, ll> h1, pair<ll, ll> h2, int h2_len) {
+    return make_pair((h1.first * pow1[h2_len] + h2.first) % mod1,
+                     (h1.second * pow2[h2_len] + h2.second) % mod2);
+  }
+
+  // [l, r)
+  bool match(int l1, int r1, int l2, int r2) { return get(l1, r1) == get(l2, r2); }
+
+  // [l, r)
+  bool match(int l, int r, ll_ll h) { return get(l, r) == h; }
+};
 
 int main(int argc, char* argv[]) {
   ll n;
@@ -48,22 +107,13 @@ int main(int argc, char* argv[]) {
   string s;
   cin >> s;
 
-  rrep(i, n, 1) rrep(j, i, 0) {
-    if (i - j == 1 || i == n - 1) {
-      dp[i][j] = s[i] == s[j];
-      continue;
-    }
-
-    if (s[i] != s[j]) {
-      dp[i][j] = 0;
-      continue;
-    }
-
-    dp[i][j] = min<ll>(i - j, dp[i + 1][j + 1] + 1);
-  }
+  RollingHash ro(s);
 
   ll ans = 0;
-  rep(i, 0, n) rep(j, 0, n) { chmax(ans, dp[i][j]); }
+  rep(i, 0, n - 1) rep(j, i + 1, n) {
+    ll l = ro.getLCP(i, j);
+    chmax(ans, min<ll>(j - i, l));
+  }
 
   put(ans);
   return 0;
