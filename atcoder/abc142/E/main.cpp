@@ -47,33 +47,26 @@ int main(int argc, char* argv[]) {
   ll n, m;
   cin >> n >> m;
 
-  vector<pair<ll, int>> keys(m);
-  vector<int> box_bits(m);
+  vector<int> price(m), box_bits(m);
   rep(i, 0, m) {
     int c;
-    cin >> keys[i].first >> c;
-    vector<ll> tmp(c);
-    scan(tmp);
-    for (ll k : tmp) {
-      keys[i].second |= (1 << (k - 1));
+    cin >> price[i] >> c;
+    rep(j, 0, c) {
+      int b;
+      cin >> b;
+      box_bits[i] |= (1 << (b - 1));
     }
   }
 
-  Fill(dp, ll(LL_INF));
+  Fill(dp, LL_INF);
   dp[0][0] = 0;
-
-  rep(i, 0, m) {
-    rep(j, 0, 1 << n) {
-      if (dp[i][j] >= LL_INF) continue;
-
-      chmin(dp[i + 1][j], dp[i][j]);
-      chmin(dp[i + 1][j | keys[i].second], dp[i][j] + keys[i].first);
-    }
+  rep(i, 0, m) rep(j, 0, (1 << n)) {
+    if (dp[i][j] == LL_INF) continue;
+    chmin(dp[i + 1][j], dp[i][j]);
+    chmin(dp[i + 1][j | box_bits[i]], dp[i][j] + price[i]);
   }
 
-  ll ans = dp[m][(1 << n) - 1] >= LL_INF ? -1 : dp[m][(1 << n) - 1];
-  put(ans);
-
+  put(dp[m][(1 << n) - 1] == LL_INF ? -1 : dp[m][(1 << n) - 1]);
   return 0;
 }
 
