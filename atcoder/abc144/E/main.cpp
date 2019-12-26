@@ -14,6 +14,8 @@
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -24,6 +26,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -54,39 +57,30 @@ template <class T> T binary_meguru(T ok, T ng, std::function<bool(T)> solve) {
 }
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld", &N);
-  long long K;
-  scanf("%lld", &K);
-  std::vector<long long> A(N);
-  for (int i = 0; i < N; i++) {
-    scanf("%lld", &A[i]);
-  }
-  std::vector<long long> F(N);
-  for (int i = 0; i < N; i++) {
-    scanf("%lld", &F[i]);
-  }
+  ll n, k;
+  cin >> n >> k;
+  vec<ll> a(n), f(n);
+  scan(a), scan(f);
 
-  sort(all(A));
-  sort(all(F), greater<ll>());
-  ll max_grades = 0;
-  rep(i, 0, N) chmax(max_grades, A[i] * F[i]);
+  sort(all(a));
+  sort(all(f), greater<ll>());
 
-  auto f = [&A, &F, K](ll x) {
-    if (x < 0) return false;
-    ll k = K;
-    rep(i, 0, sz(A)) {
-      ll a = A[i];
-      ll f = F[i];
+  auto func = [&a, &f, &k](ll cost) {
+    ll train = 0;
+    ll n = sz(a);
 
-      if (a * f <= x) continue;
-      k -= a - x / f;
+    rep(i, 0, n) {
+      if (a[i] * f[i] <= cost) continue;
+      ll diff = a[i] * f[i] - cost;
+      train += (diff + f[i] - 1) / f[i];
     }
-    return k >= 0;
+
+    return train <= k;
   };
 
-  ll ans = binary_meguru<ll>(max_grades, -1, f);
+  ll ans = binary_meguru<ll>(1'000'000'000'000LL, -1LL, func);
   put(ans);
+
   return 0;
 }
 
