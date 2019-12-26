@@ -40,12 +40,32 @@ template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld", &N);
-  std::string S;
-  std::cin >> S;
+ll dp[5005][5005];
 
+int main(int argc, char* argv[]) {
+  ll n;
+  cin >> n;
+  string s;
+  cin >> s;
+
+  rrep(i, n, 1) rrep(j, i, 0) {
+    if (i - j == 1 || i == n - 1) {
+      dp[i][j] = s[i] == s[j];
+      continue;
+    }
+
+    if (s[i] != s[j]) {
+      dp[i][j] = 0;
+      continue;
+    }
+
+    dp[i][j] = min<ll>(i - j, dp[i + 1][j + 1] + 1);
+  }
+
+  ll ans = 0;
+  rep(i, 0, n) rep(j, 0, n) { chmax(ans, dp[i][j]); }
+
+  put(ans);
   return 0;
 }
 
