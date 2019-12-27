@@ -874,5 +874,32 @@
 			""
 		],
 		"description": "RollingHash"
+	},
+	"Manacher": {
+		"prefix": "manacher",
+		"body": [
+			"",
+			"vector<int> manacher(const string& s) {",
+			"  int ss = sz(s);",
+			"  vector<int> radius(ss);",
+			"  int i = 0, j = 0;",
+			"  while (i < ss) {",
+			"    while (i - j >= 0 && i + j < ss && s[i - j] == s[i + j]) {",
+			"      ++j;",
+			"    }",
+			"    radius[i] = j;",
+			"    int k = 1;",
+			"    while (i - k >= 0 && i + k < ss && k + radius[i - k] < j) {",
+			"      radius[i + k] = radius[i - k];",
+			"      ++k;",
+			"    }",
+			"    i += k;",
+			"    j -= k;",
+			"  }",
+			"  return radius;",
+			"}",
+			""
+		],
+		"description": "Manacher(最長回分)"
 	}
 }
