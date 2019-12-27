@@ -40,20 +40,18 @@ template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-class RollingHash {
+struct RollingHash {
   static constexpr ll base1 = 1009LL;
   static constexpr ll base2 = 2009LL;
   static constexpr ll mod1 = 1000000007LL;
   static constexpr ll mod2 = 1000000009LL;
+  string s;
+  int n;
   vector<ll> hash1, hash2, pow1, pow2;
+  vector<int> sa;
 
- public:
-  RollingHash(const string& S) {
-    int n = (int)S.size();
-    hash1.assign(n + 1, 0);
-    hash2.assign(n + 1, 0);
-    pow1.assign(n + 1, 1);
-    pow2.assign(n + 1, 1);
+  RollingHash(const string& S)
+      : s(S), n(sz(S)), hash1(n + 1, 0), hash2(n + 1, 0), pow1(n + 1, 1), pow2(n + 1, 1) {
     for (int i = 0; i < n; ++i) {
       hash1[i + 1] = (hash1[i] * base1 + S[i]) % mod1;
       hash2[i + 1] = (hash2[i] * base2 + S[i]) % mod2;
@@ -99,6 +97,32 @@ class RollingHash {
 
   // [l, r)
   bool match(int l, int r, ll_ll h) { return get(l, r) == h; }
+
+  // build Suffix Array
+  void buildSA() {
+    auto f = [this](int i, int j) {
+      int k = getLCP(i, j);
+      return i + k >= n ? true : j + k >= n ? false : s[i + k] <= s[j + k];
+    };
+
+    sa.assign(n, 0);
+    iota(all(sa), 0);
+    sort(all(sa), f);
+  }
+
+  // 文字列tを含む接尾辞(after buldSA)のindex(of sa)の下限と上限(半開区間)を返す
+  i_i lower_upper_bound(const string& t) {
+    int ts = sz(t);
+    auto lower_f = [this, &t](const int& i, const int& j) { return s.compare(max(i, j), n, t) < 0; };
+    auto upper_f = [this, &t, ts](const int& i, const int& j) {
+      int index = max(i, j);
+      return ts <= (n - index) && equal(all(t), begin(s) + index);
+    };
+
+    auto l_it = lower_bound(all(sa), -1, lower_f);
+    auto u_it = lower_bound(l_it, end(sa), -1, upper_f);
+    return make_pair(l_it - begin(sa), u_it - begin(sa));
+  }
 };
 
 int main(int argc, char* argv[]) {
