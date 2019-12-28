@@ -2,28 +2,37 @@
 
 #ifdef _DEBUG
 #define debug(x) cerr << "line: " << __LINE__ << ", func: " << __func__ << " ->  " << #x << " = " << x << endl
-#define INFILE freopen("input.txt", "r", stdin)
 #else
 #define debug(x)
-#define INFILE
 #endif
 
-#define ALL(s) begin(s), end(s)
-#define RALL(s) rbegin(s), rend(s)
-#define REP(i, a, b) for (int i = (a); i < (b); i++)
-#define RREP(i, a, b) for (int i = (a); i >= (b); i--)
+#define all(s) begin(s), end(s)
+#define rall(s) rbegin(s), rend(s)
+#define rep(i, a, b) for (int i = (a); i < (b); i++)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
+#define pb push_back
+#define sz(a) int((a).size())
+#define put(a) ((cout) << (a) << (endl))
+#define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
+#define deg2rad(x) (((x)*PI) / (180.0))
+#define rad2deg(x) (((x) * (180.0)) / PI)
+#define fi first
+#define se second
 
 using namespace std;
 
 using ll = long long;
 using ull = unsigned long long;
+using ld = long double;
 using i_i = pair<int, int>;
 using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
-static constexpr ll INF = 1LL << 60;
+static constexpr ll LL_INF = 1LL << 60;
+static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
 
@@ -34,61 +43,35 @@ template <class T> static void scan(vector<T>& v);
 [[maybe_unused]] static void scan(vector<string>& v, bool isWord = true);
 template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
+template <class T> static inline T gcd(T a, T b);
+template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
-
-int indexes[100010][26];
-int f_indexes[26];
-int checked[26][26];
-vector<int> index_list[26];
+template <class T> T mod(T a, T m);
 
 int main(int argc, char* argv[]) {
   string s, t;
   cin >> s >> t;
 
-  for (int& index : f_indexes) {
-    index = -1;
-  }
-  Fill(indexes, int(-1));
+  int orig_s = sz(s);
+  s += s;
+  unordered_map<char, vec<int>> cnt;
+  rep(i, 0, sz(s)) cnt[s[i]].pb(i);
 
-  REP(i, 0, s.size()) {
-    int index = s[i] - 'a';
-    f_indexes[index] = f_indexes[index] == -1 ? i : f_indexes[index];
-
-    REP(j, 0, 26) {
-      REP(k, checked[j][index], index_list[j].size()) { indexes[index_list[j][k]][index] = i; }
-      checked[j][index] = index_list[j].size();
-    }
-    index_list[index].push_back(i);
-  }
-
-  int cur_index = f_indexes[t[0] - 'a'];
-  ll result = cur_index + 1;
-  if (cur_index == -1) {
-    cout << -1 << endl;
-    return 0;
-  }
-
-  REP(i, 1, t.size()) {
-    int index = t[i] - 'a';
-
-    if (indexes[cur_index][index] == -1) {
-      result += s.size() - cur_index - 1;
-      cur_index = f_indexes[index];
-      result += cur_index + 1;
-
-      if (cur_index == -1) {
-        cout << -1 << endl;
-        return 0;
-      }
-      continue;
+  ll loop = 0;
+  int index = -1;
+  rep(i, 0, sz(t)) {
+    if (sz(cnt[t[i]]) == 0) {
+      put(-1);
+      return 0;
     }
 
-    int diff = indexes[cur_index][index] - cur_index;
-    result += diff;
-    cur_index = indexes[cur_index][index];
+    index = *upper_bound(all(cnt[t[i]]), index);
+    if (index < orig_s) continue;
+    loop++;
+    index -= orig_s;
   }
 
-  cout << result << endl;
+  put(loop * orig_s + index + 1);
   return 0;
 }
 
