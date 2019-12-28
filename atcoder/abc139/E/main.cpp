@@ -62,20 +62,16 @@ template <class T> using Matrix = vector<vector<T>>;
 
 // @return -> not DAG if empty vector
 int topological_sort(vec<vec<vec<i_i>>>& adj_list) {
-  int v = sz(adj_list);
-  int ans = 0;
+  int v = sz(adj_list), ans = 0;
   vec<vec<ll>> cnt(v, vec<ll>(v, 0));
   stack<i_i> st;
-  rep(i, 0, v) rep(j, 0, v) {
-    for (i_i& p : adj_list[i][j]) {
-      cnt[p.fi][p.se]++;
-    }
-  }
 
+  rep(i, 0, v) rep(j, 0, v) {
+    for (i_i& p : adj_list[i][j]) cnt[p.fi][p.se]++;
+  }
   rep(i, 0, v) rep(j, 0, v) if (cnt[i][j] == 0) st.push({i, j});
 
-  bool c = true;
-  while (c) {
+  while (true) {
     vec<i_i> next_list;
     while (st.size()) {
       i_i cur = st.top();
@@ -89,7 +85,7 @@ int topological_sort(vec<vec<vec<i_i>>>& adj_list) {
 
     ans++;
     for (i_i p : next_list) st.push(p);
-    if (sz(next_list) == 0) c = false;
+    if (sz(next_list) == 0) break;
   }
 
   rep(i, 0, v) rep(j, 0, v) if (cnt[i][j] > 0) return -1;
