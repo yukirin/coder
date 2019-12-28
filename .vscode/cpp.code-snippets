@@ -900,6 +900,6 @@
 			"}",
 			""
 		],
-		"description": "Manacher(最長回分)"
+		"description": "Manacher(最長回分) 偶数長時はダミー挿入"
 	}
 }
