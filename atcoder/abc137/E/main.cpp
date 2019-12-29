@@ -9,19 +9,27 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
+#define put(a) ((cout) << (a) << (endl))
+#define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
+#define deg2rad(x) (((x)*PI) / (180.0))
+#define rad2deg(x) (((x) * (180.0)) / PI)
+#define fi first
+#define se second
 
 using namespace std;
 
 using ll = long long;
 using ull = unsigned long long;
+using ld = long double;
 using i_i = pair<int, int>;
 using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -35,24 +43,105 @@ template <class T> static void scan(vector<T>& v);
 [[maybe_unused]] static void scan(vector<string>& v, bool isWord = true);
 template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
+template <class T> static inline T gcd(T a, T b);
+template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
+template <class T> T mod(T a, T m);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long M;
-  scanf("%lld",&M);
-  long long P;
-  scanf("%lld",&P);
-  std::vector<long long> A(M);
-  std::vector<long long> B(M);
-  std::vector<long long> C(M);
-  for(int i = 0 ; i < M ; i++){
-    scanf("%lld",&A[i]);
-    scanf("%lld",&B[i]);
-    scanf("%lld",&C[i]);
+template <class T> struct Edge {
+  int src, to;
+  T cost;
+
+  Edge() = default;
+  Edge(int to, T cost) : src(-1), to(to), cost(cost) {}
+  Edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}
+
+  Edge& operator=(const int& x) {
+    to = x;
+    return *this;
   }
 
+  operator int() const { return to; }
+};
+
+template <class T> using Edges = vector<Edge<T>>;
+template <class T> using WeightedGraph = vector<Edges<T>>;
+using UnWeightedGraph = vector<vector<int>>;
+template <class T> using Matrix = vector<vector<T>>;
+
+// dijkstra (route restoration)
+template <class T> vector<T> dijkstra(int s, WeightedGraph<T>& adj_list, T inf) {
+  int si = sz(adj_list);
+  vector<T> dist(si, inf);
+
+  using Pi = pair<T, int>;
+  priority_queue<Pi, vector<Pi>, greater<Pi>> que;
+  dist[s] = 0;
+  que.emplace(dist[s], s);
+  while (!que.empty()) {
+    T cost;
+    int idx;
+    tie(cost, idx) = que.top();
+    que.pop();
+    if (dist[idx] < cost) continue;
+    for (auto& e : adj_list[idx]) {
+      auto next_cost = cost + e.cost;
+      if (dist[e.to] <= next_cost) continue;
+      dist[e.to] = next_cost;
+      que.emplace(dist[e.to], e.to);
+    }
+  }
+  return dist;
+}
+
+template <class T> vector<T> bellman_ford(Edges<T>& edges, int V, int s, T inf, WeightedGraph<T>& adj_list) {
+  vector<T> dist(V, inf);
+  dist[s] = 0;
+  for (int i = 0; i < V - 1; i++) {
+    for (auto& e : edges) {
+      if (dist[e.src] == inf) continue;
+      dist[e.to] = min(dist[e.to], dist[e.src] + e.cost);
+    }
+  }
+
+  vector<T> before(dist);
+
+  for (auto& e : edges) {
+    if (dist[e.src] == inf) continue;
+    if (dist[e.src] + e.cost < dist[e.to]) {
+      auto v = dijkstra(e.to, adj_list, inf);
+      if (v[V - 1] == LL_INF) continue;
+      return vector<T>();
+    }
+  }
+
+  if (dist[V - 1] < before[V - 1]) return vec<T>();
+  return dist;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, m, p;
+  cin >> n >> m >> p;
+  vec<ll> a(m), b(m), c(m);
+  for (int i = 0; i < m; i++) scanf("%lld %lld %lld", &a[i], &b[i], &c[i]);
+
+  Edges<ll> es(m, Edge<ll>());
+  WeightedGraph<ll> adj_list(n, Edges<ll>());
+
+  rep(i, 0, m) {
+    es[i].src = a[i] - 1;
+    es[i].to = b[i] - 1;
+    es[i].cost = -(c[i] - p);
+    adj_list[a[i] - 1].emplace_back(b[i] - 1, 1);
+  }
+
+  auto v = bellman_ford(es, n, 0, LL_INF, adj_list);
+  if (v.empty()) {
+    put(-1);
+    return 0;
+  }
+
+  put(-v[n - 1] < 0 ? 0 : -v[n - 1]);
   return 0;
 }
 
