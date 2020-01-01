@@ -9,12 +9,12 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
-#define deg2rad(x) (((x) * PI) / (180.0))
+#define deg2rad(x) (((x)*PI) / (180.0))
 #define rad2deg(x) (((x) * (180.0)) / PI)
 #define fi first
 #define se second
@@ -48,16 +48,45 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long M;
-  scanf("%lld",&M);
-  std::vector<long long> A(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&A[i]);
+template <class T> T binary_meguru(T ok, T ng, std::function<bool(T)> solve) {
+  while (abs(ok - ng) > 1) {
+    T mid = (ok + ng) / 2;
+    if (solve(mid))
+      ok = mid;
+    else
+      ng = mid;
   }
 
+  return ok;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, m;
+  cin >> n >> m;
+  vec<ll> a(n);
+  scan(a);
+  sort(all(a));
+
+  vec<ll> s(n + 1, 0);
+  rep(i, 0, n) s[i + 1] = s[i] + a[i];
+
+  auto f = [&a, m, n](ll val) {
+    ll cnt = 0;
+    for (ll num : a) cnt += end(a) - lower_bound(all(a), val - num);
+    return cnt >= m;
+  };
+
+  ll num = binary_meguru<ll>(0, 1'000'000, f);
+  ll ans = 0, cnt = 0;
+
+  for (ll val : a) {
+    ll left = upper_bound(all(a), num - val) - begin(a);
+    cnt += n - left;
+    ans += (s[n] - s[left]) + (n - left) * val;
+  }
+  ans += (m - cnt) * num;
+
+  put(ans);
   return 0;
 }
 
@@ -106,9 +135,7 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
 template <class T> inline T lcm(T a, T b) {
   T c = min(a, b), d = max(a, b);
@@ -119,6 +146,4 @@ template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
 
-template <class T> T mod(T a, T m) {
-  return (a % m + m) % m;
-}
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
