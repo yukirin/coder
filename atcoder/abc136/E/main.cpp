@@ -9,9 +9,11 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -22,6 +24,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -37,16 +40,45 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long K;
-  scanf("%lld",&K);
-  std::vector<long long> A(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&A[i]);
+vector<ll> divisor(ll n) {
+  vector<ll> ret;
+  for (ll i = 1; i * i <= n; i++) {
+    if (n % i) continue;
+    ret.push_back(i);
+    if (i * i != n) ret.push_back(n / i);
   }
 
+  sort(begin(ret), end(ret), greater<ll>());
+  return ret;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, k;
+  cin >> n >> k;
+  vec<ll> a(n);
+  scan(a);
+
+  ll total = accumulate(all(a), 0LL);
+  auto v = divisor(total);
+
+  vec<ll> m(n), neg(n + 1, 0), pos(n + 1, 0);
+  for (ll d : v) {
+    rep(i, 0, n) m[i] = a[i] % d;
+    sort(all(m));
+
+    rep(i, 0, n) {
+      neg[i + 1] = neg[i] + m[i];
+      pos[i + 1] = pos[i] + (d - m[i]) * bool(m[i]);
+    }
+
+    rep(i, 1, n) {
+      ll neg_cnt = neg[i] - neg[0];
+      ll pos_cnt = pos[n] - pos[i];
+      if (neg_cnt != pos_cnt || pos_cnt > k) continue;
+      cout << d << endl;
+      return 0;
+    }
+  }
   return 0;
 }
 
