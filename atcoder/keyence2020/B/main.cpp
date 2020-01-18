@@ -60,9 +60,9 @@ int main(int argc, char* argv[]) {
   }
   sort(all(v));
 
-  ll ans = 1;
-  ll_ll cur = v[0];
-  rep(i, 1, N) {
+  ll ans = 0;
+  ll_ll cur = {-LL_INF, -LL_INF};
+  rep(i, 0, N) {
     if (v[i].se < cur.fi) continue;
     ans++;
     cur = v[i];
