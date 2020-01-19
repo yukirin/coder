@@ -943,5 +943,28 @@
 			""
 		],
 		"description": "ChineseRem(中国剰余定理, 連立合同式を解く)"
+	},
+	"ModLCM": {
+		"prefix": "modlcm",
+		"body": [
+			"",
+			"ll modlcm(vector<ll>& ar, ll p) {",
+			"  unordered_map<ll, ll> m;",
+			"  for (ll num : ar) {",
+			"    auto v = prime_factor(num);",
+			"    for (ll_ll pa : v) chmax(m[pa.fi], pa.se);",
+			"  }",
+			"",
+			"  ll ret = 1;",
+			"  for (auto pa : m) {",
+			"    ret *= modpow(pa.fi, pa.se, p);",
+			"    ret %= p;",
+			"  }",
+			"",
+			"  return ret;",
+			"}",
+			""
+		],
+		"description": "lcm mod p"
 	}
 }
