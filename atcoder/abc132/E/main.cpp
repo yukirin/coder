@@ -9,9 +9,11 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -22,6 +24,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -37,22 +40,75 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long M;
-  scanf("%lld",&M);
-  std::vector<long long> u(M);
-  std::vector<long long> v(M);
-  for(int i = 0 ; i < M ; i++){
-    scanf("%lld",&u[i]);
-    scanf("%lld",&v[i]);
-  }
-  long long S;
-  scanf("%lld",&S);
-  long long T;
-  scanf("%lld",&T);
+template <class T> struct Edge {
+  int src, to;
+  T cost;
 
+  Edge(int to, T cost) : src(-1), to(to), cost(cost) {}
+  Edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}
+
+  Edge& operator=(const int& x) {
+    to = x;
+    return *this;
+  }
+
+  operator int() const { return to; }
+};
+
+template <class T> using Edges = vector<Edge<T>>;
+template <class T> using WeightedGraph = vector<Edges<T>>;
+using UnWeightedGraph = vector<vector<int>>;
+template <class T> using Matrix = vector<vector<T>>;
+
+// dijkstra (route restoration)
+template <class T> vector<T> dijkstra(int s, WeightedGraph<T>& adj_list, T inf) {
+  int si = sz(adj_list);
+  vector<T> dist(si, inf);
+
+  using Pi = pair<T, int>;
+  priority_queue<Pi, vector<Pi>, greater<Pi>> que;
+  dist[s] = 0;
+  que.emplace(dist[s], s);
+  while (!que.empty()) {
+    T cost;
+    int idx;
+    tie(cost, idx) = que.top();
+    que.pop();
+    if (dist[idx] < cost) continue;
+    for (auto& e : adj_list[idx]) {
+      auto next_cost = cost + e.cost;
+      if (dist[e.to] <= next_cost) continue;
+      dist[e.to] = next_cost;
+      que.emplace(dist[e.to], e.to);
+    }
+  }
+  return dist;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, m, s, t;
+  cin >> n >> m;
+  vec<ll> u(m), v(m);
+  WeightedGraph<ll> adj(n * 3);
+  rep(i, 0, m) {
+    scanf("%lld %lld", &u[i], &v[i]);
+    u[i]--, v[i]--;
+    adj[u[i] * 3].emplace_back(v[i] * 3 + 1, 1);
+    adj[u[i] * 3 + 1].emplace_back(v[i] * 3 + 2, 1);
+    adj[u[i] * 3 + 2].emplace_back(v[i] * 3, 1);
+  }
+  cin >> s >> t;
+  s--, t--;
+  s *= 3, t *= 3;
+
+  auto s_cost = dijkstra(s, adj, LL_INF);
+
+  if (s_cost[t] == LL_INF) {
+    cout << -1 << endl;
+    return 0;
+  }
+
+  cout << s_cost[t] / 3 << endl;
   return 0;
 }
 
