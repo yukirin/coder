@@ -9,7 +9,7 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 
@@ -22,6 +22,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -38,18 +39,78 @@ template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long K;
-  scanf("%lld",&K);
-  std::vector<long long> a(N-1);
-  std::vector<long long> b(N-1);
-  for(int i = 0 ; i < N-1 ; i++){
-    scanf("%lld",&a[i]);
-    scanf("%lld",&b[i]);
+template <class T> struct Edge {
+  int src, to;
+  T cost;
+
+  Edge(int to, T cost) : src(-1), to(to), cost(cost) {}
+  Edge(int src, int to, T cost) : src(src), to(to), cost(cost) {}
+
+  Edge& operator=(const int& x) {
+    to = x;
+    return *this;
   }
 
+  operator int() const { return to; }
+};
+
+template <class T> using Edges = vector<Edge<T>>;
+template <class T> using WeightedGraph = vector<Edges<T>>;
+using UnWeightedGraph = vector<vector<int>>;
+template <class T> using Matrix = vector<vector<T>>;
+
+static constexpr int MAX = 510000;
+ll fac[MAX], finv[MAX], inv[MAX];
+
+// preprocess
+void perm_init() {
+  fac[0] = fac[1] = 1;
+  finv[0] = finv[1] = 1;
+  inv[1] = 1;
+  for (int i = 2; i < MAX; i++) {
+    fac[i] = fac[i - 1] * i % MOD;
+    inv[i] = MOD - inv[MOD % i] * (MOD / i) % MOD;
+    finv[i] = finv[i - 1] * inv[i] % MOD;
+  }
+}
+
+// nPr mod p
+ll perm(int n, int k) {
+  if (n < k) return 0;
+  if (n < 0 || k < 0) return 0;
+  return (fac[n] * finv[n - k]) % MOD;
+}
+
+ll dfs(int from, int par, UnWeightedGraph& adj, int k) {
+  ll ret = 1;
+  if (from == 0)
+    ret *= perm(k, sz(adj[0]) + 1);
+  else
+    ret *= perm(k - 2, sz(adj[from]) - 1);
+
+  for (int ne : adj[from]) {
+    if (ne == par) continue;
+    ll val = dfs(ne, from, adj, k);
+    ret = (ret * val) % MOD;
+  }
+
+  return ret;
+}
+
+int main(int argc, char* argv[]) {
+  ll n, k;
+  cin >> n >> k;
+  vec<ll> a(n - 1), b(n - 1);
+  UnWeightedGraph adj(n);
+  for (int i = 0; i < n - 1; i++) {
+    scanf("%lld %lld", &a[i], &b[i]);
+    a[i]--, b[i]--;
+    adj[a[i]].pb(b[i]);
+    adj[b[i]].pb(a[i]);
+  }
+
+  perm_init();
+  cout << dfs(0, -1, adj, k) << endl;
   return 0;
 }
 
