@@ -1031,5 +1031,34 @@
 			""
 		],
 		"description": "GridBFS"
+	},
+	"ConvertRootedTree": {
+		"prefix": "convtree",
+		"body": [
+			"",
+			"// 木gを根rから遠ざかる辺のみからなる根付き木に変換",
+			"UnWeightedGraph convert_rooted_tree(const UnWeightedGraph& g, int r = 0) {",
+			"  int N = (int)g.size();",
+			"  UnWeightedGraph rg(N);",
+			"  vector<int> v(N);",
+			"  v[r] = 1;",
+			"  queue<int> que;",
+			"  que.emplace(r);",
+			"  while (!que.empty()) {",
+			"    auto p = que.front();",
+			"    que.pop();",
+			"    for (auto& to : g[p]) {",
+			"      if (v[to] == 0) {",
+			"        v[to] = 1;",
+			"        que.emplace(to);",
+			"        rg[p].emplace_back(to);",
+			"      }",
+			"    }",
+			"  }",
+			"  return rg;",
+			"}",
+			""
+		],
+		"description": "木を根付き木に変換"
 	}
 }
