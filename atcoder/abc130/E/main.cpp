@@ -9,10 +9,12 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -23,6 +25,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -42,18 +45,10 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long M;
-  scanf("%lld",&M);
-  std::vector<long long> S(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&S[i]);
-  }
-  std::vector<long long> T(M);
-  for(int i = 0 ; i < M ; i++){
-    scanf("%lld",&T[i]);
-  }
+  ll n, m;
+  cin >> n >> m;
+  vec<ll> s(n), t(m);
+  scan(s), scan(t);
 
   return 0;
 }
@@ -103,13 +98,9 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
-template <class T> inline T lcm(T a, T b) {
-  return (a * b) / gcd(a, b);
-}
+template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
