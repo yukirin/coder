@@ -9,10 +9,12 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -23,6 +25,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -41,10 +44,27 @@ template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
-int main(int argc, char* argv[]) {
-  long long L;
-  scanf("%lld",&L);
+ll dp[2][100005];
 
+int main(int argc, char* argv[]) {
+  string l;
+  cin >> l;
+  int s = sz(l);
+
+  Fill(dp, 1LL);
+  rep(i, 0, 2) rep(j, 1, s + 1) {
+    if (i == 0) {
+      dp[0][j] = (dp[0][j - 1] * (l[j - 1] == '1' ? 2 : 1)) % MOD;
+      continue;
+    }
+
+    if (j == 1) continue;
+    dp[1][j] = (dp[1][j - 1] * 3) % MOD;
+    if (l[j - 1] == '0') continue;
+    dp[1][j] = (dp[1][j] + dp[0][j - 1]) % MOD;
+  }
+
+  cout << ((dp[0][s] + dp[1][s]) % MOD) << endl;
   return 0;
 }
 
@@ -93,13 +113,9 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
-template <class T> inline T lcm(T a, T b) {
-  return (a * b) / gcd(a, b);
-}
+template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
