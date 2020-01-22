@@ -47,11 +47,9 @@ int main(int argc, char* argv[]) {
   scan(a);
 
   multiset<ll> s;
-  ll ans = 0;
   for (ll num : a) {
     auto it = s.lower_bound(num);
     if (it == begin(s)) {
-      ans++;
       s.insert(num);
       continue;
     }
@@ -61,7 +59,7 @@ int main(int argc, char* argv[]) {
     s.insert(num);
   }
 
-  cout << ans << endl;
+  cout << sz(s) << endl;
   return 0;
 }
 
