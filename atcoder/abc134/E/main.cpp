@@ -9,9 +9,11 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -22,6 +24,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -38,13 +41,27 @@ template <class T> static inline bool chmin(T& a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  std::vector<long long> A(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&A[i]);
+  ll n;
+  cin >> n;
+  vec<ll> a(n);
+  scan(a);
+
+  multiset<ll> s;
+  ll ans = 0;
+  for (ll num : a) {
+    auto it = s.lower_bound(num);
+    if (it == begin(s)) {
+      ans++;
+      s.insert(num);
+      continue;
+    }
+
+    it--;
+    s.erase(it);
+    s.insert(num);
   }
 
+  cout << ans << endl;
   return 0;
 }
 
