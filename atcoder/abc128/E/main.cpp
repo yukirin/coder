@@ -125,33 +125,47 @@ template <typename Monoid, typename OperatorMonoid = Monoid> struct LazySegmentT
 int main(int argc, char* argv[]) {
   ll n, q;
   cin >> n >> q;
-  vec<ll> s(n), t(n), x(n), d(q);
+  vec<ll> d(q);
   vec<pair<ll, ll_ll>> v(n);
   for (int i = 0; i < n; i++) cin >> (v[i].se.fi) >> (v[i].se.se) >> (v[i].fi);
   sort(all(v));
   scan(d);
+  set<ll> ds(all(d));
+  unordered_map<ll, ll> m;
 
-  auto f = [](ll a, ll b) { return min(a, b); };
-  auto g = [](ll a, ll b) { return b; };
-  auto h = [](ll a, ll b) { return b; };
-  auto p = [](ll a, ll len) { return a; };
-  LazySegmentTree<ll> seg(q, f, g, h, p, LL_INF, LL_INF);
-  seg.build();
+  // auto f = [](ll a, ll b) { return min(a, b); };
+  // auto g = [](ll a, ll b) { return b; };
+  // auto h = [](ll a, ll b) { return b; };
+  // auto p = [](ll a, ll len) { return a; };
+  // LazySegmentTree<ll> seg(q, f, g, h, p, LL_INF, LL_INF);
+  // seg.build();
 
-  rrep(i, n, 0) {
+  // rrep(i, n, 0) {
+  rep(i, 0, n) {
     ll st = v[i].se.fi, en = v[i].se.se;
     ll pos = v[i].fi;
 
-    int lower = lower_bound(all(d), st - pos) - begin(d);
-    int upper = lower_bound(all(d), en - pos) - begin(d);
-    seg.update(lower, upper, pos);
+    // int lower = lower_bound(all(d), st - pos) - begin(d);
+    // int upper = lower_bound(all(d), en - pos) - begin(d);
+    // seg.update(lower, upper, pos);
+
+    auto lower = ds.lower_bound(st - pos);
+    auto upper = ds.lower_bound(en - pos);
+
+    for (auto it = lower; it != upper; it++) m[*it] = pos;
+    ds.erase(lower, upper);
   }
 
   string ss = "";
-  rep(i, 0, q) {
-    ll num = seg[i];
-    ss += to_string(num == LL_INF ? -1 : num) + "\n";
+  for (ll val : d) {
+    ll num = m[val];
+    ss += to_string(num ? num : -1) + "\n";
   }
+
+  // rep(i, 0, q) {
+  //   ll num = seg[i];
+  //   ss += to_string(num == LL_INF ? -1 : num) + "\n";
+  // }
   cout << ss;
 
   return 0;
