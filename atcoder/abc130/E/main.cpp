@@ -43,6 +43,10 @@ template <class T> static inline bool chmin(T& a, T b);
 template <class T> static inline T gcd(T a, T b);
 template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
+template <class T> T mod(T a, T m);
+
+ll dp[2005][2005];
+ll sum[2005][2005];
 
 int main(int argc, char* argv[]) {
   ll n, m;
@@ -50,6 +54,14 @@ int main(int argc, char* argv[]) {
   vec<ll> s(n), t(m);
   scan(s), scan(t);
 
+  rep(i, 0, n) rep(j, 0, m) {
+    if (s[i] == t[j]) dp[i][j] = sum[i][j] + 1;
+
+    sum[i + 1][j + 1] = sum[i][j + 1] + sum[i + 1][j] - sum[i][j] + dp[i][j];
+    sum[i + 1][j + 1] = mod(sum[i + 1][j + 1], MOD);
+  }
+
+  cout << sum[n][m] + 1 << endl;
   return 0;
 }
 
@@ -105,3 +117,5 @@ template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
+
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
