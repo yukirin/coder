@@ -67,60 +67,47 @@ template <class T> using WeightedGraph = vector<Edges<T>>;
 using UnWeightedGraph = vector<vector<int>>;
 template <class T> using Matrix = vector<vector<T>>;
 
-// dijkstra (route restoration)
-// ! init process -> prev[i] = -1
-template <class T> vector<T> dijkstra(int s, WeightedGraph<T>& adj_list, T inf) {
-  int si = sz(adj_list);
-  vector<T> dist(si, inf);
-
-  using Pi = pair<T, int>;
-  priority_queue<Pi, vector<Pi>, greater<Pi>> que;
-  dist[s] = 0;
-  que.emplace(dist[s], s);
-  while (!que.empty()) {
-    T cost;
-    int idx;
-    tie(cost, idx) = que.top();
-    que.pop();
-    if (dist[idx] < cost) continue;
-    for (auto& e : adj_list[idx]) {
-      auto next_cost = cost + e.cost;
-      if (dist[e.to] <= next_cost) continue;
-      dist[e.to] = next_cost;
-      que.emplace(dist[e.to], e.to);
+// warshall floyd (route restoration)
+// ! init process -> adj[i][i] = 0, adj[i][j] = inf -> (add edge)
+template <class T> bool warshall_floyd(Matrix<T>& adj, Matrix<bool>& checked) {
+  int s = sz(adj);
+  for (int k = 0; k < s; k++) {
+    for (int i = 0; i < s; i++) {
+      for (int j = 0; j < s; j++) {
+        if (adj[i][k] + adj[k][j] > adj[i][j]) continue;
+        if (adj[i][k] + adj[k][j] == adj[i][j]) {
+          if (i == k || j == k) continue;
+          checked[i][j] = checked[j][i] = true;
+          continue;
+        }
+        return false;
+        // adj[i][j] = adj[i][k] + adj[k][j];
+      }
     }
   }
-  return dist;
+
+  return true;
 }
 
 int main(int argc, char* argv[]) {
   ll n;
   cin >> n;
-  vec<vec<ll>> a(n, vec<ll>(n));
+  Matrix<ll> a(n, vec<ll>(n));
+  Matrix<bool> checked(n, vec<bool>(n));
   rep(i, 0, n) rep(j, 0, n) scanf("%lld", &a[i][j]);
 
-  ll ans = 0;
-  vec<pair<ll, ll_ll>> edges;
-  rep(i, 0, n) rep(j, i + 1, n) edges.emplace_back(a[i][j], make_pair(i, j));
-  WeightedGraph<ll> adj(n);
-  sort(all(edges));
-
-  rep(i, 0, sz(edges)) {
-    ll cost = edges[i].fi;
-    ll_ll edge = edges[i].se;
-
-    auto paths = dijkstra(edge.fi, adj, LL_INF);
-    if (paths[edge.se] < cost) {
-      cout << -1 << endl;
-      return 0;
-    }
-    if (paths[edge.se] == cost) continue;
-    adj[edge.fi].emplace_back(edge.se, cost);
-    adj[edge.se].emplace_back(edge.fi, cost);
-    ans += cost;
+  if (!warshall_floyd(a, checked)) {
+    cout << -1 << endl;
+    return 0;
   }
 
+  ll ans = 0;
+  rep(i, 0, n) rep(j, i + 1, n) {
+    if (checked[i][j]) continue;
+    ans += a[i][j];
+  }
   cout << ans << endl;
+
   return 0;
 }
 
