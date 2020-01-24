@@ -9,13 +9,15 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
-#define deg2rad(x) (((x) * PI) / (180.0))
+#define deg2rad(x) (((x)*PI) / (180.0))
 #define rad2deg(x) (((x) * (180.0)) / PI)
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -26,6 +28,7 @@ using ll_ll = pair<ll, ll>;
 using d_ll = pair<double, ll>;
 using ll_d = pair<ll, double>;
 using d_d = pair<double, double>;
+template <class T> using vec = vector<T>;
 
 static constexpr ll LL_INF = 1LL << 60;
 static constexpr int I_INF = 1 << 28;
@@ -45,17 +48,36 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 template <class T> T mod(T a, T m);
 
 int main(int argc, char* argv[]) {
-  long long N;
-  scanf("%lld",&N);
-  long long C;
-  scanf("%lld",&C);
-  std::vector<long long> x(N);
-  std::vector<long long> v(N);
-  for(int i = 0 ; i < N ; i++){
-    scanf("%lld",&x[i]);
-    scanf("%lld",&v[i]);
+  ll n, c;
+  cin >> n >> c;
+  vec<ll_ll> xv(n);
+  for (int i = 0; i < n; i++) scanf("%lld %lld", &xv[i].fi, &xv[i].se);
+  vec<ll_ll> rev(all(xv));
+  reverse(all(rev));
+
+  // ! sum [left, right) = (a[left] + ... + a[right - 1]) -> s[right] - s[left]
+  vec<ll> clock(n + 1, 0), cclock(n + 1, 0);
+  rep(i, 0, n) {
+    clock[i + 1] = clock[i] + xv[i].se;
+    cclock[i + 1] = cclock[i] + rev[i].se;
   }
 
+  ll ans = 0, rev_ans = 0;
+  vec<ll> max_clock(n + 1), max_cclock(n + 1);
+  rep(i, 1, n + 1) {
+    chmax(ans, clock[i] - xv[i - 1].fi);
+    chmax(rev_ans, cclock[i] - (c - rev[i - 1].fi));
+    max_clock[i] = ans;
+    max_cclock[i] = rev_ans;
+  }
+
+  chmax(ans, rev_ans);
+  rep(i, 1, n + 1) {
+    chmax(ans, clock[i] - (xv[i - 1].fi * 2) + max_cclock[n - i]);
+    chmax(ans, cclock[i] - ((c - rev[i - 1].fi) * 2) + max_clock[n - i]);
+  }
+
+  put(ans);
   return 0;
 }
 
@@ -104,18 +126,12 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
-template <class T> inline T lcm(T a, T b) {
-  return (a * b) / gcd(a, b);
-}
+template <class T> inline T lcm(T a, T b) { return (a * b) / gcd(a, b); }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
 
-template <class T> T mod(T a, T m) {
-  return (a % m + m) % m;
-}
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
