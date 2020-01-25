@@ -9,13 +9,15 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
-#define deg2rad(x) (((x) * PI) / (180.0))
+#define deg2rad(x) (((x)*PI) / (180.0))
 #define rad2deg(x) (((x) * (180.0)) / PI)
+#define fi first
+#define se second
 
 using namespace std;
 
@@ -47,12 +49,10 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 template <class T> T mod(T a, T m);
 
 int main(int argc, char* argv[]) {
-  long long n;
-  scanf("%lld",&n);
-  std::vector<long long> a(n+1);
-  for(int i = 0 ; i < n+1 ; i++){
-    scanf("%lld",&a[i]);
-  }
+  ll n;
+  cin >> n;
+  vec<ll> a(n + 1);
+  scan(a);
 
   return 0;
 }
@@ -102,9 +102,7 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
 template <class T> inline T lcm(T a, T b) {
   T c = min(a, b), d = max(a, b);
@@ -115,6 +113,4 @@ template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
 
-template <class T> T mod(T a, T m) {
-  return (a % m + m) % m;
-}
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
