@@ -9,12 +9,12 @@
 #define all(s) begin(s), end(s)
 #define rall(s) rbegin(s), rend(s)
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
-#define rrep(i, a, b) for (int i = ((a) - 1); i >= (b); i--)
+#define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
 #define sz(a) int((a).size())
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
-#define deg2rad(x) (((x) * PI) / (180.0))
+#define deg2rad(x) (((x)*PI) / (180.0))
 #define rad2deg(x) (((x) * (180.0)) / PI)
 
 using namespace std;
@@ -46,9 +46,30 @@ template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val
 template <class T> T mod(T a, T m);
 
 int main(int argc, char* argv[]) {
-  long long K;
-  scanf("%lld",&K);
+  ll k;
+  cin >> k;
 
+  ll d = (k + 50) / 50;
+  ll m = 50 - k % 50;
+  vec<ll> ans(50, 50 + d - 1);
+
+  rep(i, 0, m) {
+    int index = max_element(all(ans)) - begin(ans);
+    rep(j, 0, 50) {
+      if (j == index) {
+        ans[j] -= 50;
+        continue;
+      }
+      ans[j]++;
+    }
+  }
+
+  string s = "";
+  rep(i, 0, 50) s += to_string(ans[i]) + " ";
+  s.pop_back();
+
+  cout << 50 << endl;
+  cout << s << endl;
   return 0;
 }
 
@@ -97,9 +118,7 @@ template <class T> inline bool chmin(T& a, T b) {
   return 0;
 }
 
-template <class T> inline T gcd(T a, T b) {
-  return __gcd(a, b);
-}
+template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
 
 template <class T> inline T lcm(T a, T b) {
   T c = min(a, b), d = max(a, b);
@@ -110,6 +129,4 @@ template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
   std::fill((T*)arr, (T*)(arr + N), val);
 }
 
-template <class T> T mod(T a, T m) {
-  return (a % m + m) % m;
-}
+template <class T> T mod(T a, T m) { return (a % m + m) % m; }
