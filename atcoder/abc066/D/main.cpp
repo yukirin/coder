@@ -48,12 +48,52 @@ template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
+static constexpr int MAX = 100010;
+ll fac[MAX], finv[MAX], inv[MAX];
+
+// preprocess
+void comb_init() {
+  fac[0] = fac[1] = 1;
+  finv[0] = finv[1] = 1;
+  inv[1] = 1;
+  for (int i = 2; i < MAX; i++) {
+    fac[i] = fac[i - 1] * i % MOD;
+    inv[i] = MOD - inv[MOD % i] * (MOD / i) % MOD;
+    finv[i] = finv[i - 1] * inv[i] % MOD;
+  }
+}
+
+// nCr mod p
+ll comb(int n, int k) {
+  if (n < k) return 0;
+  if (n < 0 || k < 0) return 0;
+  return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
+}
+
 int main(int argc, char* argv[]) {
   ll n;
   cin >> n;
-  vec<ll> a(n + 1);
+  vec<ll> a(n + 1), twice(n + 1, -1);
   scan(a);
+  comb_init();
 
+  i_i pos;
+
+  rep(i, 0, n + 1) {
+    if (twice[a[i]] != -1) {
+      pos.fi = twice[a[i]];
+      pos.se = i;
+      break;
+    }
+
+    twice[a[i]] = i;
+  }
+
+  rep(i, 1, n + 2) {
+    ll a = comb(n + 1, i);
+    ll b = comb(pos.fi + (n - pos.se), i - 1);
+    put(mod(a - b, MOD));
+  }
   return 0;
 }
 
