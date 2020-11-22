@@ -1,5 +1,6 @@
 {
     "files.associations": {
         "vector": "cpp"
-    }
+    },
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\wsl.exe"
 }
