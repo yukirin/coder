@@ -1,5 +1,12 @@
 {
   "files.associations": {
     "vector": "cpp"
+  },
+  "clang-format.executable": "/usr/bin/clang-format",
+  "clang-format.fallbackStyle": "Google",
+  "clang-format.language.cpp.style": "{ BasedOnStyle: Google, ColumnLimit: 110, AlwaysBreakTemplateDeclarations: false}",
+  "clang-format.language.cpp.fallbackStyle": "{ BasedOnStyle: Google, ColumnLimit: 110, AlwaysBreakTemplateDeclarations: false}",
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
   }
 }
