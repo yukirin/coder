@@ -70,6 +70,7 @@
                 "-Wextra",
                 "-Wno-unused-result",
                 "-Wno-unused-const-variable",
+                "-Wno-unused-parameter",
                 "-fsanitize=undefined,address,leak,bounds",
                 "-O2"
             ]
