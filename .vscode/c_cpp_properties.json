@@ -43,10 +43,36 @@
                 "_DEBUG",
                 "_GLIBCXX_DEBUG"
             ],
-            "compilerPath": "/usr/bin/clang++-8",
+            "compilerPath": "/usr/bin/clang++",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "WSL_g++",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "_GLIBCXX_DEBUG"
+            ],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64",
+            "compilerArgs": [
+                "-std=c++17",
+                "-D_DEBUG",
+                "-D_GLIBCXX_DEBUG",
+                "-ftrapv",
+                "-Wall",
+                "-Wextra",
+                "-Wno-unused-result",
+                "-Wno-unused-const-variable",
+                "-fsanitize=undefined,address,leak,bounds",
+                "-O2"
+            ]
         }
     ],
     "version": 4
