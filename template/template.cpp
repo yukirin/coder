@@ -11,7 +11,8 @@
 #define rep(i, a, b) for (int i = (a); i < (b); i++)
 #define rrep(i, a, b) for (int i = ((a)-1); i >= (b); i--)
 #define pb push_back
-#define sz(a) int((a).size())
+#define eb emplace_back
+#define sz(a) int(std::size((a)))
 #define put(a) ((cout) << (a) << (endl))
 #define putf(a, n) ((cout) << (fixed) << (setprecision(n)) << (a) << (endl))
 #define deg2rad(x) (((x)*PI) / (180.0))
@@ -53,8 +54,6 @@ template <class T> static void scan(vector<T>& v);
 [[maybe_unused]] static void scan(vector<string>& v, bool isWord = true);
 template <class T> static inline bool chmax(T& a, T b);
 template <class T> static inline bool chmin(T& a, T b);
-template <class T> static inline T gcd(T a, T b);
-template <class T> static inline T lcm(T a, T b);
 template <class A, size_t N, class T> static void Fill(A (&arr)[N], const T& val);
 template <class T> T mod(T a, T m);
 
@@ -109,13 +108,6 @@ template <class T> inline bool chmin(T& a, T b) {
     return 1;
   }
   return 0;
-}
-
-template <class T> inline T gcd(T a, T b) { return __gcd(a, b); }
-
-template <class T> inline T lcm(T a, T b) {
-  T c = min(a, b), d = max(a, b);
-  return c * (d / gcd(c, d));
 }
 
 template <class A, size_t N, class T> void Fill(A (&arr)[N], const T& val) {
