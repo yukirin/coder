@@ -92,3 +92,5 @@ input.txt
 .vs/
 # .vscode/
 a.out
+
+*.swp
