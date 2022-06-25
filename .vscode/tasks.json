@@ -1,0 +1,37 @@
+{
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "buildcpp",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-fdiagnostics-color=always",
+        "-g3",
+        "${file}",
+        "-o",
+        "${fileDirname}/a.out",
+        "-std=c++17",
+        "-D_DEBUG",
+        "-D_GLIBCXX_DEBUG",
+        "-ftrapv",
+        "-Wall",
+        "-Wextra",
+        "-Wno-unused-result",
+        "-Wno-unused-const-variable",
+        "-Wno-unused-parameter",
+        "-fsanitize=undefined,address,leak,bounds",
+        "-O0"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": ["$gcc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "デバッガーによって生成されたタスク。"
+    }
+  ],
+  "version": "2.0.0"
+}

@@ -1,0 +1,58 @@
+{
+  // IntelliSense を使用して利用可能な属性を学べます。
+  // 既存の属性の説明をホバーして表示します。
+  // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(gdb) Launch",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${fileDirname}/a.out",
+      "cwd": "${fileDirname}",
+      "preLaunchTask": "buildcpp",
+      "MIMode": "gdb",
+      "args": ["<", "${fileDirname}/${input:choice}"],
+      "miDebuggerPath": "/usr/bin/gdb",
+      "externalConsole": false,
+      "environment": [{ "name": "ASAN_OPTIONS", "value": "detect_leaks=0" }],
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "(lldb) Launch",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${fileDirname}/a.out",
+      "cwd": "${fileDirname}",
+      "preLaunchTask": "buildcpp",
+      "stdio": ["${fileDirname}/${input:choice}", null],
+      "console": "integratedTerminal",
+      "env": { "ASAN_OPTIONS": "detect_leaks=0" }
+    }
+  ],
+  "inputs": [
+    {
+      "type": "pickString",
+      "id": "choice",
+      "description": "入力ファイルを選択して下さい",
+      "options": [
+        "in_1.txt",
+        "in_2.txt",
+        "in_3.txt",
+        "in_4.txt",
+        "in_5.txt",
+        "in_6.txt",
+        "in_7.txt",
+        "in_8.txt",
+        "in_9.txt"
+      ],
+      "default": "in_1.txt"
+    }
+  ]
+}
