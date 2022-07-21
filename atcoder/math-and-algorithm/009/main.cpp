@@ -37,8 +37,8 @@ static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
 
-static constexpr YES = "Yes";
-static constexpr NO = "No";
+static constexpr const char* YES = "Yes";
+static constexpr const char* NO = "No";
 
 static map<type_index, const char* const> scanType = {
     {typeid(int), "%d"}, {typeid(ll), "%lld"}, {typeid(double), "%lf"}, {typeid(char), "%c"}};
@@ -56,10 +56,21 @@ int main(int argc, char* argv[]) {
   long long S;
   std::scanf("%lld", &S);
   std::vector<long long> A(N);
-  for(int i = 0 ; i < N ; i++){
+  for (int i = 0; i < N; i++) {
     std::scanf("%lld", &A[i]);
   }
 
+  std::vector<vector<bool>> dp(N + 1, vector<bool>(10001, false));
+  dp[0][0] = true;
+
+  rep(i, 0, N) rep(j, 0, 10001) {
+    if (!dp[i][j]) continue;
+    dp[i + 1][j] = true;
+    if (A[i] + j > S) continue;
+    dp[i + 1][A[i] + j] = true;
+  }
+
+  put(dp[N][S] ? YES : NO);
   return 0;
 }
 
