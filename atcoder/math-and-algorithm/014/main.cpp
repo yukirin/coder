@@ -37,7 +37,6 @@ static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
 
-
 static map<type_index, const char* const> scanType = {
     {typeid(int), "%d"}, {typeid(ll), "%lld"}, {typeid(double), "%lf"}, {typeid(char), "%c"}};
 
@@ -52,6 +51,23 @@ int main(int argc, char* argv[]) {
   long long N;
   std::scanf("%lld", &N);
 
+  ll m = ceil(sqrt(N));
+  vec<ll> result;
+
+  rep(i, 2, m + 1) {
+    while (N % i == 0) {
+      N /= i;
+      result.eb(i);
+    }
+  }
+  if (N != 1) result.eb(N);
+
+  string ans = "";
+  for (const ll v : result) {
+    ans += to_string(v) + " ";
+  }
+  ans.pop_back();
+  put(ans);
   return 0;
 }
 
