@@ -37,7 +37,6 @@ static constexpr int I_INF = 1 << 28;
 static constexpr double PI = static_cast<double>(3.14159265358979323846264338327950288);
 static constexpr double EPS = numeric_limits<double>::epsilon();
 
-
 static map<type_index, const char* const> scanType = {
     {typeid(int), "%d"}, {typeid(ll), "%lld"}, {typeid(double), "%lf"}, {typeid(char), "%c"}};
 
@@ -55,11 +54,21 @@ int main(int argc, char* argv[]) {
   std::scanf("%lld", &W);
   std::vector<long long> w(N);
   std::vector<long long> v(N);
-  for(int i = 0 ; i < N ; i++){
+  for (int i = 0; i < N; i++) {
     std::scanf("%lld", &w[i]);
     std::scanf("%lld", &v[i]);
   }
 
+  vec<vec<ll>> dp(N + 1, vec<ll>(W + 1, 0));
+
+  rep(i, 0, N) rep(j, 0, W + 1) {
+    chmax(dp[i + 1][j], dp[i][j]);
+
+    if (j + w[i] > W) continue;
+    chmax(dp[i + 1][j + w[i]], dp[i][j] + v[i]);
+  }
+
+  put(*max_element(dp[N].begin(), dp[N].end()));
   return 0;
 }
 
